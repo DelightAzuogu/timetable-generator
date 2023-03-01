@@ -1,0 +1,22 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+option {
+  background-color: #2d50ba;
+  color: white;
+}
+
+.m-form {
+  margin-top: 30px;
+}
+
+th {
+  color: white;
+}
+
+td {
+  color: white;
+}

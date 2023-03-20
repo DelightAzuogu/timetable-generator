@@ -1,4 +1,5 @@
 exports.daysOfWeek = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+exports.times = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 
 //the regular times for a three hour class
 exports.threeHours = [

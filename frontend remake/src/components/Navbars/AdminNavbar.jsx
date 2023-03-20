@@ -2,15 +2,10 @@ import React from "react";
 import classNames from "classnames";
 
 // reactstrap components
-import {
-  NavbarBrand,
-  Navbar,
-  Container,
-  NavbarToggler,
-} from "reactstrap";
+import { NavbarBrand, Navbar, Container, NavbarToggler } from "reactstrap";
+import { URL } from "variables/general";
 
 function AdminNavbar(props) {
-
   return (
     <>
       <Navbar className={classNames("navbar-absolute")} expand="lg">
@@ -18,7 +13,7 @@ function AdminNavbar(props) {
           <div className="navbar-wrapper">
             <div
               className={classNames("navbar-toggle d-inline", {
-                toggled: props.sidebarOpened
+                toggled: props.sidebarOpened,
               })}
             >
               <NavbarToggler onClick={props.toggleSidebar}>
@@ -31,11 +26,31 @@ function AdminNavbar(props) {
               {props.brandText}
             </NavbarBrand>
           </div>
-          <button
-            className="btn btn-dark btn-sm"
-            onClick={(e) => { props.logout(e) }}
-          >Log out
-          </button>
+          <div>
+            {props.instructor && (
+              <button
+                className="btn btn-dark btn-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(
+                    `${URL}/instructor/${localStorage.getItem("id")}`,
+                    "_blank",
+                    "noreferrer"
+                  );
+                }}
+              >
+                View
+              </button>
+            )}
+            <button
+              className="btn btn-dark btn-sm"
+              onClick={(e) => {
+                props.logout(e);
+              }}
+            >
+              Log out
+            </button>
+          </div>
         </Container>
       </Navbar>
     </>

@@ -7,7 +7,7 @@ const AddToTimetable = (props) => {
   //to get the page
   const page = props.location.pathname.split("/")[2][0];
 
-  //initiallizing the states
+  //initializing the states
   const [instructors, setInstructors] = useState([]);
   const [courses, setCourses] = useState([]);
   const [classrooms, setClassrooms] = useState([]);
@@ -55,7 +55,7 @@ const AddToTimetable = (props) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Authentication: `bearer ${localStorage.getItem("token")}`,
+        Authorization: `bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((res) => {
@@ -68,7 +68,7 @@ const AddToTimetable = (props) => {
         setClassrooms(resData.classrooms);
       })
       .catch((err) => {
-        throw err;
+        console.error(err);
       });
   }, []);
 
@@ -82,12 +82,8 @@ const AddToTimetable = (props) => {
       },
       body: JSON.stringify(body),
     })
-      .then(async (res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw await res.json();
-        }
+      .then((res) => {
+        return res.json();
       })
       .then((resData) => {
         if (resData.msg === "success") {
@@ -96,6 +92,7 @@ const AddToTimetable = (props) => {
       })
       .catch(({ error }) => {
         notify("danger", error.msg);
+        console.error(error);
       });
   };
 
@@ -158,6 +155,7 @@ const AddToTimetable = (props) => {
   return (
     <>
       <div className="content">
+        {/* for the pop up  */}
         <div className="react-notification-alert-container">
           <NotificationAlert ref={notificationAlertRef} />
         </div>

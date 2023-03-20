@@ -1,4 +1,5 @@
 const { Schema, default: mongoose } = require("mongoose");
+const { departmentSchema } = require("./department");
 
 const courseSchema = new Schema({
   _id: String,
@@ -9,6 +10,14 @@ const courseSchema = new Schema({
   classHour: {
     type: Number,
     required: true,
+  },
+  department: {
+    type: departmentSchema,
+    required: true
+  },
+  takenBy: {
+    type: [String],
+    required: true
   },
 });
 

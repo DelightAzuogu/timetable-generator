@@ -30,15 +30,6 @@ const timetableSchema = new Schema(
       type: String,
       required: true,
     },
-  },
-  {
-    virtuals: {
-      name: {
-        set(v) {
-          this.name = this.course._id + this.group;
-        },
-      },
-    },
   }
 );
 

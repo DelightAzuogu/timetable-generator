@@ -41,8 +41,12 @@ function Sidebar(props) {
     <BackgroundColorContext.Consumer>
       {({ color }) => (
         <div className="sidebar" data={color}>
-          <div className="sidebar-wrapper " ref={sidebarRef}>
-            <div className="logo row" onClick={props.toggleSidebar}>
+          <div className="sidebar-wrapper" ref={sidebarRef}>
+            <div
+              className="logo"
+              style={{ width: "100%", display: "flex", flexWrap: "nowrap" }}
+              onClick={props.toggleSidebar}
+            >
               <div
                 className="simple-text logo-mini logo-img"
                 onClick={props.toggleSidebar}
@@ -55,7 +59,6 @@ function Sidebar(props) {
                   height={"30px"}
                 />
               </div>
-              {/* {logoText} */}
               <div
                 className="simple-text logo-normal"
                 onClick={props.toggleSidebar}

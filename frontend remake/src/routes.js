@@ -1,12 +1,13 @@
-
 import AddToTimetable from "views/add";
+import CourseTimetableCompareView from "views/CourseTimetableCompareView";
+import StudentsTimetableCompareView from "views/studentsTimetableCompare";
+import RemoveTimetable from "views/removeTimetable";
 import View from "views/view";
 
 var routes = [
   {
     path: "/automatically-add-to-timetable",
     name: "Add Automatically",
-    icon: "tim-icons icon-chart-pie-36",
     component: AddToTimetable,
     layout: "/admin",
 
@@ -14,15 +15,32 @@ var routes = [
   {
     path: "/manually-add-to-timetable",
     name: "Add Manually",
-    icon: "tim-icons icon-chart-pie-36",
     component: AddToTimetable,
     layout: "/admin",
 
   },
   {
+    path: "/remove-timetable",
+    name: "Remove from timetable",
+    component: RemoveTimetable,
+    layout: "/admin",
+
+  },
+  {
+    path: "/course-student-timetable-compare",
+    name: "Course Timetable Compare ",
+    component: CourseTimetableCompareView,
+    layout: "/admin",
+  },
+  {
+    path: "/students-timetable-compare",
+    name: "Students Timetable Compare ",
+    component: StudentsTimetableCompareView,
+    layout: "/admin",
+  },
+  {
     path: "/instructor",
     name: "View Instructor Timetable",
-    icon: "tim-icons icon-chart-pie-36",
     component: View,
     layout: "/admin",
 
@@ -30,7 +48,18 @@ var routes = [
   {
     path: "/classroom",
     name: "View Classroom Timetable",
-    icon: "tim-icons icon-chart-pie-36",
+    component: View,
+    layout: "/admin",
+  },
+  {
+    path: "/course",
+    name: "View Courses Timetable",
+    component: View,
+    layout: "/admin",
+  },
+  {
+    path: "/student",
+    name: "View Student Timetable",
     component: View,
     layout: "/admin",
   },

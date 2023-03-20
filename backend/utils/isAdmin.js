@@ -4,16 +4,14 @@ const { Admin } = require("../model/admin");
 
 module.exports = async (req, res, next) => {
   //get the authentication header
-  const authHeader = req.get("Authentication");
+  const authHeader = req.get("Authorization");
   if (!authHeader) {
-    console.log("1")
     next(newError("authentication required 1", 401));
   }
 
   //split it [bearer {this is the token}]
   const token = authHeader.split(" ")[1];
   if (!token) {
-    console.log("2")
     next(newError("authentication required 2", 401));
   }
 
@@ -26,15 +24,12 @@ module.exports = async (req, res, next) => {
   }
   //check if paylaod exists
   if (!payload) {
-    console.log("3")
     next(newError("authentication required 3", 401));
   }
-  // console.log(payload);
 
   //check if the admin is in the database
   const admin = await Admin.findOne({ _id: payload.id });
   if (!admin) {
-    console.log("4")
     next(newError("authentication required 4", 401));
   }
 

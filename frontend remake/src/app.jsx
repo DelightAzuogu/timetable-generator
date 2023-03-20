@@ -2,52 +2,29 @@ import React, { useState, useEffect } from "react";
 import Login from "views/login";
 import { Route, Switch, Redirect } from "react-router-dom";
 import AdminLayout from "layouts/Admin/Admin.js";
-import InstructorTable from "views/instructorTable";
+import Timetable from "views/timetable";
+import CourseTimetableCompareTimetable from "views/CourseTimetableComapreTimetable";
+import Instructor from "layouts/instructor/Instructor";
+import StudentsTimetableCompareTimetable from "views/studentsTimetableCompareTimetable";
 
 const App = (props) => {
-  const [isAuth, setIsAuth] = useState(true);
-  const [status, setStatus] = useState("admin");
+  const [isAuth, setIsAuth] = useState("false");
+  const [status, setStatus] = useState("");
+  const [id, setId] = useState("0");
 
+  // document.body.classList.remove("white-content");
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsAuth(true);
+      const status = localStorage.getItem("status");
+      const id = localStorage.getItem("id");
+      if (id && status) {
+        setId(id);
+        setStatus(status);
+      }
     } else setIsAuth(false);
   }, []);
-
-  // for the login
-  const loginHandler = async (e) => {
-    try {
-      e.preventDefault();
-
-      const id = e.target[0].value;
-      const password = e.target[1].value;
-
-      // requesting to login from the database
-      const res = await fetch("http://localhost:4000/auth/login?status=admin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id, password }),
-      });
-
-      // converting the response to usable object
-      if (res.ok) {
-        var resData = await res.json();
-      } else {
-        throw await res.json();
-      }
-
-      //store the token in local storage
-      localStorage.setItem("token", resData.token);
-
-      setIsAuth(true);
-    } catch (err) {
-      setIsAuth(false);
-      console.log(err);
-    }
-  };
 
   //logOut hangler
   const logoutHandler = (e) => {
@@ -58,25 +35,93 @@ const App = (props) => {
 
   //the routes if there is login
   if (isAuth) {
-    return (
-      <Switch>
-        <Route
-          path="/admin"
-          render={(props) => <AdminLayout {...props} logout={logoutHandler} />}
-        />
-        <Route
-          path="/instructor/:id"
-          render={(props) => <InstructorTable {...props} />}
-        />
-        <Redirect from="/" to="/admin/automatically-add-to-timetable" />
-      </Switch>
-    );
+    if (status === "admin") {
+      return (
+        <Switch>
+          <Route
+            path="/admin"
+            render={(props) => (
+              <AdminLayout {...props} logout={logoutHandler} />
+            )}
+          />
+          <Route
+            path="/instructor/:id"
+            render={(props) => <Timetable {...props} />}
+          />
+          <Route
+            path="/classroom/:id"
+            render={(props) => <Timetable {...props} />}
+          />
+          <Route
+            path="/course/:id"
+            render={(props) => <Timetable {...props} />}
+          />
+          <Route
+            path="/student/:id"
+            render={(props) => <Timetable {...props} />}
+          />
+          <Route
+            path="/compare-timetable/:course/"
+            render={(props) => <CourseTimetableCompareTimetable {...props} />}
+          />
+          <Route
+            path="/compare-student-timetable"
+            render={(props) => <StudentsTimetableCompareTimetable {...props} />}
+          />
+          <Redirect from="/" to="/admin/automatically-add-to-timetable" />
+        </Switch>
+      );
+    } else if (status === "instructor") {
+      return (
+        <Switch>
+          <Route
+            path={`/instructor/${id}`}
+            render={(props) => <Timetable {...props} logout={logoutHandler} />}
+          />
+          <Route
+            path="/instructor"
+            render={(props) => <Instructor {...props} logout={logoutHandler} />}
+          />
+          <Route
+            path="/classroom/:id"
+            render={(props) => <Timetable {...props} logout={logoutHandler} />}
+          />
+          <Route
+            path="/course/:id"
+            render={(props) => <Timetable {...props} logout={logoutHandler} />}
+          />
+          <Route
+            path="/student/:id"
+            render={(props) => <Timetable {...props} logout={logoutHandler} />}
+          />
+          <Route
+            path="/compare-timetable/:course/"
+            render={(props) => <CourseTimetableCompareTimetable {...props} />}
+          />
+          <Route
+            path="/compare-student-timetable"
+            render={(props) => <StudentsTimetableCompareTimetable {...props} />}
+          />
+          <Redirect
+            from="/"
+            to="/instructor/course-student-timetable-compare"
+          />
+        </Switch>
+      );
+    }
   } else {
     return (
       <Switch>
         <Route
           path="/login"
-          render={(props) => <Login onSubmit={loginHandler} />}
+          render={(props) => (
+            <Login
+              // onSubmit={loginHandler}
+              setStatus={setStatus}
+              setIsAuth={setIsAuth}
+              setId={setId}
+            />
+          )}
         />
         <Redirect from="/" to="/login" />{" "}
       </Switch>

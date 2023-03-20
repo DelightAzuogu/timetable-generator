@@ -11,11 +11,7 @@ const instructorSchema = new Schema({
     type: String,
     required: true,
     unique: false,
-  },
-  teaches: {
-    type: [{ course: courseSchema, group: Number }],
-    required: false,
-  },
+  }
 });
 
 exports.instructorSchema = instructorSchema;

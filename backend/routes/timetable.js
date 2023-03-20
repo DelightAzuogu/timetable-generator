@@ -1,24 +1,22 @@
 const { Router } = require("express");
 const { check, body } = require("express-validator");
-const isAuth = require("../utils/isAuth");
+const isAdmin = require("../utils/isAdmin");
 
 const timetableController = require("../controllers/timetable");
-const { Instructor } = require("../model/instructor");
 
 const router = Router();
 
-//get add to timetable
-//this will send the courses, instructors, classrooms to the frontend
+//get add 
+//this will send the courses, instructors, classrooms
 router.get("/add",
-  // isAuth,
   timetableController.getAddToTimetable
 );
 
-//post add timetable
+//post add 
 //this is adding to the timetable automaticall
 router.post(
   "/add",
-  // isAuth,
+  isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
@@ -32,7 +30,7 @@ router.post(
 //this is adding to the timetable automatically but with same day teaching
 router.post(
   "/add-same-day",
-  // isAuth,
+  isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
@@ -46,7 +44,7 @@ router.post(
 //this is adding to the timetable manually
 router.post(
   "/add-manually",
-  // isAuth,
+  isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
@@ -58,36 +56,13 @@ router.post(
   timetableController.postAddToTimetableManually
 );
 
-//get instructor-timetable
-//this is getting the instructor timetable
-router.get(
-  "/instructor-timetable/:id",
-  check("id").notEmpty().trim(),
-  timetableController.getIntructorTimetable
-)
+router.delete("/:id",
+  isAdmin,
+  timetableController.deleteFromTimetable
+);
 
-//get course-timetable
-//this is getting the course timetable
-router.get(
-  "/course-timetable",
-  check("id").notEmpty().trim(),
-  timetableController.getCourseTimetable
-)
-
-//get classroom-timetable
-//this is getting the classroom timetable
-router.get(
-  "/classroom-timetable",
-  check("id").notEmpty().trim(),
-  timetableController.getClassroomTimetable
-)
-
-//get classroom
-//this is getting the classroom timetable
-router.get(
-  "/classrooms",
-  timetableController.getClassrooms
-)
+//this will return the timetables
+router.get("/", timetableController.getTimetable);
 
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import NotificationAlert from "react-notification-alert";
 
-import { BASE_URL } from "variables/general";
+import { BASE_URL, inputStyle } from "variables/general";
 
 const AddToTimetable = (props) => {
   //to get the page
@@ -78,11 +78,14 @@ const AddToTimetable = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Authentication: `bearer ${localStorage.getItem("token")}`,
+        Authorization: `bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(body),
     })
-      .then((res) => {
+      .then(async (res) => {
+        if (!res.ok) {
+          throw await res.json();
+        }
         return res.json();
       })
       .then((resData) => {
@@ -92,6 +95,7 @@ const AddToTimetable = (props) => {
       })
       .catch(({ error }) => {
         notify("danger", error.msg);
+        console.log(error.msg);
         console.error(error);
       });
   };
@@ -159,7 +163,6 @@ const AddToTimetable = (props) => {
         <div className="react-notification-alert-container">
           <NotificationAlert ref={notificationAlertRef} />
         </div>
-        {/* the instructor dropMenu */}
         <form
           className=" d-block justify-content-center"
           onSubmit={(e) => {
@@ -272,10 +275,7 @@ const AddToTimetable = (props) => {
 
             <input
               className="form-control"
-              style={{
-                width: "100px",
-                height: "42px",
-              }}
+              style={inputStyle}
               type="number"
               id="group"
               name="group"
@@ -347,7 +347,7 @@ const AddToTimetable = (props) => {
               value={studentCount}
               onChange={async (e) => await setStudentCount(e.target.value)}
               required
-              style={{ height: "42px" }}
+              style={inputStyle}
             />
           </div>
           {/* //submit button */}

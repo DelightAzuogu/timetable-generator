@@ -25,10 +25,22 @@ exports.createDummy = async () => {
   }
 
   //create departments
-  const comp = await Department.create({ name: "computer engineering", faculty: "engineering" });
-  const soft = await Department.create({ name: "software engineering", faculty: "engineering" });
-  const eee = await Department.create({ name: "electrical engineering", faculty: "engineering" });
-  const bus = await Department.create({ name: "business administration", faculty: "economics and administrative studies" });
+  const comp = await Department.create({
+    name: "computer engineering",
+    faculty: "engineering",
+  });
+  const soft = await Department.create({
+    name: "software engineering",
+    faculty: "engineering",
+  });
+  const eee = await Department.create({
+    name: "electrical engineering",
+    faculty: "engineering",
+  });
+  const bus = await Department.create({
+    name: "business administration",
+    faculty: "economics and administrative studies",
+  });
 
   //create courses
   const pseudo = await Course.create({
@@ -36,68 +48,112 @@ exports.createDummy = async () => {
     name: "Pseudo Code",
     classHour: 3,
     department: soft,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const compPro = await Course.create({
     _id: "Comp101",
     name: "Computer Programming",
     classHour: 3,
     department: soft,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
-
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const data = await Course.create({
     _id: "Comp102",
     name: "Data Structure",
     classHour: 3,
     department: soft,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const cal_1 = await Course.create({
     _id: "Math100",
     name: "Calculus 1",
     classHour: 3,
     department: comp,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const cal_2 = await Course.create({
     _id: "Math101",
     name: "Calculus 2",
     classHour: 3,
     department: comp,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const dip = await Course.create({
     _id: "EE100",
     name: "Digital Image",
     classHour: 4,
     department: comp,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const dsp = await Course.create({
     _id: "EE101",
     name: "Digital Signal",
     classHour: 3,
     department: eee,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const sp = await Course.create({
     _id: "Busn100",
     name: "Strategic planning",
     classHour: 3,
     department: bus,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
   const acc = await Course.create({
     _id: "Busn102",
     name: "Accounting",
     classHour: 3,
     department: bus,
-    takenBy: ["software engineering", "computer engineering", "electrical engineering", "business administration"],
+    takenBy: [
+      "software engineering",
+      "computer engineering",
+      "electrical engineering",
+      "business administration",
+    ],
   });
 
   //create students
-  let i = 1
+  let i = 1;
   await Student.create({
     name: { first: "delight", last: "azuogu" },
     _id: i++,
@@ -105,16 +161,20 @@ exports.createDummy = async () => {
     takes: [
       { course: cal_1, group: 1 },
       { course: data, group: 2 },
-      { course: dsp, group: 1 }
-    ]
-  })
+      { course: dsp, group: 1 },
+    ],
+  });
 
-  // await Student.create({
-  //   name: { first: "delight", last: "azuogu" },
-  //   _id: i++,
-  //   department: comp,
-  //   takes: [cal_2, compPro, data, dip]
-  // })
+  await Student.create({
+    name: { first: "delight", last: "azuogu" },
+    _id: i++,
+    department: comp,
+    takes: [
+      { course: cal_1, group: 1 },
+      { course: data, group: 2 },
+      { course: dsp, group: 1 },
+    ],
+  });
 
   // await Student.create({
   //   name: { first: "delight", last: "azuogu" },
@@ -158,10 +218,8 @@ exports.createDummy = async () => {
   //   takes: [cal_1, sp, acc]
   // })
 
-
-
   //create instructors
-  i = 1
+  i = 1;
   Instructor.create({
     _id: i++,
     name: "delight ikechukwu",

@@ -13,25 +13,74 @@ exports.getClassroomTimetable = async (req, res, next) => {
 
     const classroom = await Classroom.findOne({ _id: id });
     if (!classroom) {
-      throw newError("invalid classroom", 400)
+      throw newError("invalid classroom", 400);
     }
 
-    const timetable = await Timetable.find({ classroom })
+    const timetable = await Timetable.find({ classroom });
 
-    res.status(200).json({ msg: "success", timetable, classroom })
+    res.status(200).json({ msg: "success", timetable, classroom });
   } catch (error) {
     next(error);
   }
-}
+};
 
 //this will return the classrooms
 exports.getClassrooms = async (req, res, next) => {
   try {
     const classrooms = await Classroom.find();
 
-    res.status(200).json({ classrooms })
-
+    res.status(200).json({ classrooms });
   } catch (error) {
     next(error);
   }
-}
+};
+
+//add a classroom to the database
+exports.postAddClassroom = async (req, res, next) => {
+  try {
+    let { building, classNumber, capacity } = req.body;
+    building = building.toUpperCase();
+
+    if (classNumber <= 0) {
+      throw newError("invalid class number", 400);
+    }
+    if (capacity <= 0) {
+      throw newError("invalid capacity", 400);
+    }
+
+    //check if building with classnumber exists
+    const checkClassroom = await Classroom.findOne({
+      building,
+      classNum: classNumber,
+    });
+    if (checkClassroom) {
+      throw newError("classroom already exists");
+    }
+
+    let classroom = { building, classNum: classNumber, capacity };
+
+    classroom = await Classroom.create(classroom);
+
+    console.log(classroom);
+    res.status(201).json({ classroom, msg: "successful" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.DeleteClassroom = async (req, res, next) => {
+  try {
+    let { id } = req.params;
+
+    //check for the classroom
+    const classroom = await Classroom.findOne({ _id: id });
+    if (!classroom) {
+      throw newError("invalid classroom", 400);
+    }
+
+    await Classroom.deleteOne({ _id: id });
+    res.status(204).json({ msg: "successsful" });
+  } catch (error) {
+    next(error);
+  }
+};

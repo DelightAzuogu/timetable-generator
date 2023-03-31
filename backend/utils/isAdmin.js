@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
   var payload;
   try {
     //get the payload
-    payload = jwt.verify(token, process.env.JWT_SECRET);
+    payload = jwt.verify(token, process.env.JWT_SECRET_ADMIN);
   } catch (err) {
     next(err);
   }

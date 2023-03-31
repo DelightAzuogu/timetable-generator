@@ -6,6 +6,7 @@ const courseSchema = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   classHour: {
     type: Number,
@@ -13,11 +14,11 @@ const courseSchema = new Schema({
   },
   department: {
     type: departmentSchema,
-    required: true
+    required: true,
   },
   takenBy: {
     type: [String],
-    required: true
+    required: true,
   },
 });
 

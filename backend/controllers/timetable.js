@@ -10,27 +10,26 @@ const { courseSchedule } = require("../utils/courseSchedule");
 //get the indexes of a course(val) in a department(key) in the course Schedule
 const getAllIndex = (val, key) => {
   if (!val || !key) {
-    console.log("provide a value and a key")
-    return []
+    console.log("provide a value and a key");
+    return [];
   }
   // val = val.toLowerCase()
   const indexes = [];
 
   for (let i in courseSchedule[key]) {
-    if (courseSchedule[key][i].includes(val))
-      indexes.push(parseInt(i))
+    if (courseSchedule[key][i].includes(val)) indexes.push(parseInt(i));
   }
-  return indexes
-}
+  return indexes;
+};
 
 // find the freetime of a class in {day: "", time:[]}
 async function classFreetime(classroom, classHour) {
   try {
     //error handling
-    if (!classroom) throw "classroom is not specified"
-    if (!classHour) throw "class hour is not specifed"
+    if (!classroom) throw "classroom is not specified";
+    if (!classHour) throw "class hour is not specifed";
 
-    let freetimes = []
+    let freetimes = [];
     let classroomUse = await Timetable.find({ classroom });
 
     //using this for when the class hour is 3
@@ -66,8 +65,8 @@ async function classFreetime(classroom, classHour) {
           }
         }
         if (!init) {
-          return hours
-        };
+          return hours;
+        }
       });
     }
 
@@ -85,13 +84,11 @@ async function maxClassRoom() {
     if (rooms[i].capacity > maxCap) maxCap = rooms[i].capacity;
   }
   return maxCap;
-};
+}
 
 //ArrayShuffle an array
 function ArrayShuffle(array) {
-
-  if (!(array instanceof Array)) throw "pass an array"
-
+  if (!(array instanceof Array)) throw "pass an array";
 
   let currentIndex = array.length,
     randomIndex;
@@ -111,7 +108,6 @@ function ArrayShuffle(array) {
 
   return array;
 }
-
 
 //get add to timetable
 exports.getAddToTimetable = async (req, res, next) => {
@@ -350,8 +346,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
     //freetimes of the classroom
     let freetimes;
 
-    loopClassrooms:
-    for (let i = 0; i < classrooms.length; i++) {
+    loopClassrooms: for (let i = 0; i < classrooms.length; i++) {
       //get the free time of the classroom
       freetimes = await classFreetime(classrooms[i], course.classHour);
 
@@ -360,12 +355,10 @@ exports.postAddtoTimetable = async (req, res, next) => {
         freetimes = ArrayShuffle(freetimes);
         freetimes = ArrayShuffle(freetimes);
         //check for the freetime that does not clash with any other course in the same section as the course in question.
-        loopFreetimes:
-        for (let freetime of freetimes) {
-          let courseRecord = [] //this keeps record of the course that has already been checked;
+        loopFreetimes: for (let freetime of freetimes) {
+          let courseRecord = []; //this keeps record of the course that has already been checked;
 
-          loopCourseScheduleKey:
-          for (let key in courseSchedule) {
+          loopCourseScheduleKey: for (let key in courseSchedule) {
             if (course.takenBy.includes(key)) {
               //get the indexes the course is in course schedule
               const indexes = getAllIndex(course.name, key);
@@ -378,16 +371,15 @@ exports.postAddtoTimetable = async (req, res, next) => {
                     const courseTtableCheck = await Timetable.findOne({
                       day: freetime.day,
                       time: freetime.time[time],
-                      "course.name": c
-                    })
+                      "course.name": c,
+                    });
                     const instructorTtableCheck = await Timetable.findOne({
                       day: freetime.day,
                       time: freetime.time[time],
-                      instructorId: instructor._id
+                      instructorId: instructor._id,
                     });
                     if (instructorTtableCheck || courseTtableCheck)
                       continue loopFreetimes;
-
                   }
                   courseRecord.push(c);
                 }
@@ -426,7 +418,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
     timetable = await Timetable.create(timetable);
     res.status(201).json({ msg: "success", timetable });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -569,13 +561,12 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
       throw newError("invalid student count", 400);
     }
 
-
     //get the times the lecturer has a class
     const instructorClassTime = await Timetable.find({ instructorId });
 
     //redirect to the normal add route when instructor doenst hve a course in timetable
-    if (!(instructorClassTime.length)) {
-      res.redirect(307, "add")
+    if (!instructorClassTime.length) {
+      res.redirect(307, "add");
     }
     //when instructor have a course in the timetable
     else {
@@ -603,10 +594,9 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
       for (let timetable of instructorClassTime) {
         //take only the classrooms that can fit the number of students expected
         if (timetable.classroom.capacity >= studentCount) {
-          classrooms.push(timetable.classroom)
+          classrooms.push(timetable.classroom);
         }
       }
-
       classrooms = ArrayShuffle(classrooms);
 
       let timetable = {
@@ -622,13 +612,16 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
       for (let i = 0; i < classrooms.length; i++) {
         freetimes = await classFreetime(classrooms[i], course.classHour);
 
-        if (freetimes.length > 0) continue;
+        if (freetimes.length <= 0) continue;
 
         //remove the freetimes that are not in that day
         //also remove the onces that clashes with the instructor class time
         let classInstructorTime = freetimes.filter((freetime) => {
           for (let instructorTime of instructorClassTime) {
-            if (instructorTime.classroom == classrooms[i] && freetime.day === instructorTime.day) {
+            if (
+              instructorTime.classroom == classrooms[i] &&
+              freetime.day === instructorTime.day
+            ) {
               let check = false;
               for (let time of freetime.time) {
                 if (instructorTime.time.includes(time)) {
@@ -638,16 +631,15 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
               if (check == false) return freetime;
             }
           }
-        })
+        });
 
         if (!classInstructorTime.length) continue;
 
         //check if the there is a clashing class for those course with the departments schedule
-        loopCITime:
-        for (let CITime of classInstructorTime) {
-          let courseRecord = []
+        loopCITime: for (let CITime of classInstructorTime) {
+          let courseRecord = [];
           for (let key in courseSchedule) {
-            if (!(course.takenBy.includes(key))) continue;
+            if (!course.takenBy.includes(key)) continue;
 
             //get the indexes the course is in course schedule
             const indexes = getAllIndex(course.name, key);
@@ -660,22 +652,22 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
                   const courseTtableCheck = await Timetable.findOne({
                     day: CITime.day,
                     time,
-                    "course.name": c
-                  })
+                    "course.name": c,
+                  });
                   const instructorTtableCheck = await Timetable.findOne({
                     day: CITime.day,
                     time,
-                    instructorId: instructor._id
-                  })
-                  if (courseTtableCheck || instructorTtableCheck) continue loopCITime;
+                    instructorId: instructor._id,
+                  });
+                  if (courseTtableCheck || instructorTtableCheck)
+                    continue loopCITime;
                 }
                 courseRecord.push(c);
               }
             }
-
           }
-          timetable.day = classInstructorTime[0].day
-          timetable.time = classInstructorTime[0].time
+          timetable.day = classInstructorTime[0].day;
+          timetable.time = classInstructorTime[0].time;
           timetable.classroom = classrooms[i];
           break;
         }
@@ -686,7 +678,7 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
 
       //incase there wasnt a freetime anywhere
       if (!timetable.classroom) {
-        isClassInstructorTime = true
+        isClassInstructorTime = true;
       }
       //when there is no class, day and time assign from the same classroom check
       //check for same day with different classroom that can fit the students
@@ -721,13 +713,12 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
         }
         classrooms = ArrayShuffle(classrooms);
 
-        loopClassrooms:
-        for (let i = 0; i < classrooms.length; i++) {
+        loopClassrooms: for (let i = 0; i < classrooms.length; i++) {
           freetimes = await classFreetime(classrooms[i], course.classHour);
           if (freetimes.length > 0) {
             //remove the freetimes that are not in that day
             //also remove the free times that the instructor has a class
-            const classInstructorTime = freetimes.filter(freetime => {
+            const classInstructorTime = freetimes.filter((freetime) => {
               for (let instructorTime of instructorClassTime) {
                 if (freetime.day == instructorTime.day) {
                   let check = false;
@@ -739,50 +730,53 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
                   if (check == false) return freetime;
                 }
               }
-            })
+            });
             if (classInstructorTime.length) {
               //check if the there is a clashing class for those course with the departments schedule
-              loopCITime:
-              for (let CITime of classInstructorTime) {
-                let courseRecord = []
+              loopCITime: for (let CITime of classInstructorTime) {
+                let courseRecord = [];
                 for (let key in courseSchedule) {
-                  if (!(course.takenBy.includes(key))) continue;
+                  if (!course.takenBy.includes(key)) {
+                    continue;
+                  }
 
                   //get the indexes the course is in course schedule
                   const indexes = getAllIndex(course.name, key);
                   for (let index of indexes) {
                     //check all the courses in that index to if they have a clashing course
                     for (let c of courseSchedule[key][index]) {
-                      if (courseRecord.includes(c)) continue;
+                      if (courseRecord.includes(c)) {
+                        continue;
+                      }
+
                       //check if course has class in that time
                       for (let time of CITime.time) {
                         const courseTtableCheck = await Timetable.findOne({
                           day: CITime.day,
                           time,
-                          "course.name": c
-                        })
+                          "course.name": c,
+                        });
                         const instructorTtableCheck = await Timetable.findOne({
                           day: CITime.day,
                           time,
-                          instructorId: instructor._id
-                        })
+                          instructorId: instructor._id,
+                        });
                         if (courseTtableCheck || instructorTtableCheck) {
                           continue loopCITime;
                         }
-
                       }
                       courseRecord.push(c);
                     }
                   }
                 }
-                timetable.day = classInstructorTime[0].day
-                timetable.time = classInstructorTime[0].time
+                timetable.day = classInstructorTime[0].day;
+                timetable.time = classInstructorTime[0].time;
                 timetable.classroom = classrooms[i];
-                break;
+                break loopClassrooms;
               }
             }
           }
-          if (i >= (classrooms.length - 1)) {
+          if (i >= classrooms.length - 1) {
             classrooms = [];
             i = -1; //setting this to -1 so when it increases in the loop it will be at 0
             // make sure there is a classroom to search through
@@ -790,7 +784,7 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
               //when we go thruogh all the classroooms and found no freetime, we increase the search area
               if (min >= maxCapacity) {
                 throw newError(
-                  "instructor cannot be fitted on the same day 1",
+                  "course cannot be fitted on the same day 1",
                   400
                 );
               }
@@ -808,21 +802,16 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
       }
 
       if (timetable.day) {
-        timetable = await Timetable.create(timetable)
+        timetable = await Timetable.create(timetable);
         res.status(201).json({ msg: "success", timetable });
-      }
-      else {
-        throw newError(
-          "instructor cannot be fitted on the same day 2",
-          400
-        );
+      } else {
+        throw newError("instructor cannot be fitted on the same day 2", 400);
       }
     }
-
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 //this will add to the timetable manually, ie you manually input the time, day  etc
 /*exports.postAddToTimetableManually = async (req, res, next) => {
@@ -912,24 +901,25 @@ exports.postAddToTimetableManually = async (req, res, next) => {
   try {
     valError(req);
 
-    let { day, startTime, classroomId, instructorId, courseId, group } = req.body;
+    let { day, startTime, classroomId, instructorId, courseId, group } =
+      req.body;
     if (group <= 0) {
       group = 1;
     }
 
     //check day
-    day = day.toLowerCase()
-    if (!(daysOfWeek.includes(day.toLowerCase()))) {
+    day = day.toLowerCase();
+    if (!daysOfWeek.includes(day.toLowerCase())) {
       throw newError("invalid day");
     }
 
     // check if classroom
-    const classroom = await Classroom.findOne({ _id: classroomId })
+    const classroom = await Classroom.findOne({ _id: classroomId });
     if (!classroom) {
       throw newError("invalid Classroom", 400);
     }
     //check the instructor
-    let instructor = await Instructor.findOne({ _id: instructorId })
+    let instructor = await Instructor.findOne({ _id: instructorId });
     if (!instructor) {
       throw newError("invalid instructor", 400);
     }
@@ -956,24 +946,23 @@ exports.postAddToTimetableManually = async (req, res, next) => {
       //check for if the class is free on that day and time
       let check = await Timetable.findOne({ classroom, day, time: s });
       if (check) {
-        throw newError("class is not free", 400)
+        throw newError("class is not free", 400);
       }
 
-
       //check if the instructor is free on that day and time.
-      check = await Timetable.findOne({ instructorId, day, time: s })
+      check = await Timetable.findOne({ instructorId, day, time: s });
       if (check) {
         throw newError("instructor has a class", 400);
       }
 
       //this is incase the check up top succeed, the time will be used in the timetable instead of creating another loop
-      time.push(s)
+      time.push(s);
     }
 
     // check if the course has a clash with any course in the courseSchedule list
     const courseRecord = [];
     for (let key in courseSchedule) {
-      if (!(course.takenBy.includes(key))) continue;
+      if (!course.takenBy.includes(key)) continue;
       const indexes = getAllIndex(course.name, key);
       for (let index of indexes) {
         for (let c of courseSchedule[key][index]) {
@@ -983,7 +972,7 @@ exports.postAddToTimetableManually = async (req, res, next) => {
             const courseTtableCheck = await Timetable.findOne({
               day,
               time: t,
-              "course.name": c
+              "course.name": c,
             });
             if (courseTtableCheck) {
               throw newError("clash with course Schedule");
@@ -994,7 +983,6 @@ exports.postAddToTimetableManually = async (req, res, next) => {
       }
     }
 
-
     //add the thing to the timetable
     let timetable = {
       classroom,
@@ -1002,34 +990,32 @@ exports.postAddToTimetableManually = async (req, res, next) => {
       instructorId,
       course,
       group,
-      time: time
+      time: time,
     };
     timetable = await Timetable.create(timetable);
 
-    res.status(201).json({ msg: "success", timetable })
-  }
-  catch (error) {
+    res.status(201).json({ msg: "success", timetable });
+  } catch (error) {
     next(error);
   }
-}
+};
 //this is just getting all the courses in the timetable
 exports.getTimetable = async (req, res, next) => {
   try {
     const timetable = await Timetable.find();
 
     res.status(200).json({ timetable });
-
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 //this is deleting an item from the timetable
 exports.deleteFromTimetable = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const timetable = await Timetable.findOne({ _id: id })
+    const timetable = await Timetable.findOne({ _id: id });
     if (!timetable) {
       throw newError("timetable not found", 400);
     }
@@ -1038,12 +1024,8 @@ exports.deleteFromTimetable = async (req, res, next) => {
 
     res.status(204).json({ msg: "deleted" });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
-
-
-
-
+};
 
 //experimental

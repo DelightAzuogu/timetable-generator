@@ -28,6 +28,10 @@ router.post(
 );
 
 //delete remive course
-router.delete("/delet/:id", isAdmin, classroomController.DeleteClassroom);
+router.delete(
+  "/:id",
+  // isAdmin,
+  classroomController.DeleteClassroom
+);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 var cors = require("cors");
+var queue = require("express-queue");
 
 const database = require("./database.js");
 const authRoute = require("./routes/auth");
@@ -15,6 +16,8 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
 
 //auth router
 app.use("/auth", authRoute);

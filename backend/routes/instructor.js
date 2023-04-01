@@ -26,4 +26,11 @@ router.post(
   instructorController.postAddInstuctor
 );
 
+//delete and instructor
+router.delete(
+  "/:id",
+  // isAdmin,
+  instructorController.deleteInstructor
+);
+
 module.exports = router;

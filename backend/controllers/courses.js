@@ -203,3 +203,35 @@ exports.postAddCourse = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteCourse = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    //get the course
+    const course = await Course.findOne({ _id: id });
+    if (!course) {
+      throw newError("invalid course", 400);
+    }
+
+    //get students that take that course
+    const students = await Student.find({ "takes.course": course });
+
+    //remove that course from the takes
+    for (let student of students) {
+      student.takes = student.takes.filter((e) => e.course._id !== course._id);
+    }
+
+    //delete the course from timetable
+    await Timetable.deleteMany({ course });
+
+    // save the students
+    students.save();
+
+    //delete the course
+    await Course.deleteOne({ _id: id });
+    res.status(204).json({ msg: "successful" });
+  } catch (error) {
+    next(error);
+  }
+};

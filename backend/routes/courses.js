@@ -34,4 +34,6 @@ router.post(
   courseController.postAddCourse
 );
 
+router.delete("/:id", courseController.deleteCourse);
+
 module.exports = router;

@@ -5,6 +5,7 @@ const { Timetable } = require("../model/timetable");
 const valError = require("../utils/validationError");
 const newError = require("../utils/error");
 const { daysOfWeek, fourHours, threeHours } = require("../utils/daysAndTime");
+const { checkClassroom } = require("../utils/checkClassroom");
 
 //this will get the timetable of the classroom
 exports.getClassroomTimetable = async (req, res, next) => {
@@ -73,12 +74,15 @@ exports.DeleteClassroom = async (req, res, next) => {
     let { id } = req.params;
 
     //check for the classroom
-    const classroom = await Classroom.findOne({ _id: id });
-    if (!classroom) {
-      throw newError("invalid classroom", 400);
+    const classroom = await checkClassroom(id);
+
+    //get the timetable in that class
+    const timetables = await Timetable.find({ classroom });
+    for (let timetable of timetables) {
+      timetable.delete();
     }
 
-    await Classroom.deleteOne({ _id: id });
+    classroom.delete();
     res.status(204).json({ msg: "successsful" });
   } catch (error) {
     next(error);

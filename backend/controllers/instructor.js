@@ -7,6 +7,7 @@ const { Timetable } = require("../model/timetable");
 const valError = require("../utils/validationError");
 const newError = require("../utils/error");
 const { daysOfWeek, fourHours, threeHours } = require("../utils/daysAndTime");
+const { checkInstructor } = require("../utils/checkInstructor");
 
 //this will get the timetable of the Instructor
 exports.getIntructorTimetable = async (req, res, next) => {
@@ -53,6 +54,29 @@ exports.postAddInstuctor = async (req, res, next) => {
 
     instructor = await Instructor.create(instructor);
     res.status(201).json({ instructor, msg: "successful" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteInstructor = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    //check for instructor
+    const instructor = await checkInstructor(id);
+
+    //get the timetable of the instructor
+    const timetables = await Timetable.find({ instructorId: instructor.id });
+
+    //delete the timetables one by one
+    for (let timetable of timetables) {
+      timetable.delete();
+    }
+
+    //delete the instructor
+    instructor.delete();
+    res.json({ msg: "successful", timetables });
   } catch (error) {
     next(error);
   }

@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { check, body } = require("express-validator");
+const { check } = require("express-validator");
 
 const instructorController = require("../controllers/instructor");
 const isAdmin = require("../utils/isAdmin");
@@ -27,10 +27,10 @@ router.post(
 );
 
 //delete and instructor
-router.delete(
-  "/:id",
-  // isAdmin,
-  instructorController.deleteInstructor
-);
+router.delete("/:id", isAdmin, instructorController.deleteInstructor);
+
+router.get("/:id", instructorController.getInstructor);
+
+router.get("/", instructorController.getInstructors);
 
 module.exports = router;

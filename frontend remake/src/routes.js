@@ -3,8 +3,10 @@ import CourseTimetableCompareView from "views/CourseTimetableCompareView";
 import StudentsTimetableCompareView from "views/studentsTimetableCompare";
 import RemoveTimetable from "views/removeTimetable";
 import View from "views/view";
-import AddInstructor from "views/addInstructor";
-import AddClassroom from "views/addClassroom";
+import Instructor from "views/Instructor";
+import Classroom from "views/Classroom";
+import Course from "views/Course";
+import Student from "views/Students";
 
 //this route is for the admin
 var routes = [
@@ -39,39 +41,51 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/instructor",
+    path: "/view-instructor",
     name: "View Instructor Timetable",
     component: View,
     layout: "/admin",
   },
   {
-    path: "/classroom",
+    path: "/view-classroom",
     name: "View Classroom Timetable",
     component: View,
     layout: "/admin",
   },
   {
-    path: "/course",
+    path: "/view-course",
     name: "View Courses Timetable",
     component: View,
     layout: "/admin",
   },
   {
-    path: "/student",
+    path: "/view-student",
     name: "View Student Timetable",
     component: View,
     layout: "/admin",
   },
   {
-    path: "/add-instructor",
-    name: "Add Instructor",
-    component: AddInstructor,
+    path: "/instructor",
+    name: "Instructor",
+    component: Instructor,
     layout: "/admin",
   },
   {
-    path: "/add-classroom",
-    name: "Add Classroom",
-    component: AddClassroom,
+    path: "/classroom",
+    name: "Classroom",
+    component: Classroom,
+    layout: "/admin",
+  },
+  {
+    path: "/course",
+    name: "Course",
+    component: Course,
+    layout: "/admin",
+  },
+  {
+    path: "/student",
+    name: "Student",
+    component: Student,
     layout: "/admin",
   },
 ];

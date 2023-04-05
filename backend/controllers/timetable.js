@@ -5,21 +5,31 @@ const { Timetable } = require("../model/timetable");
 const valError = require("../utils/validationError");
 const newError = require("../utils/error");
 const { daysOfWeek, fourHours, threeHours } = require("../utils/daysAndTime");
-const { courseSchedule } = require("../utils/courseSchedule");
+// const { courseSchedule } = require("../utils/courseSchedule");
+const { CourseSchedule } = require("../model/courseSchedule");
+const { checkInstructor } = require("../utils/checkInstructor");
+const { checkCourse } = require("../utils/checkCourse");
 
 //get the indexes of a course(val) in a department(key) in the course Schedule
-const getAllIndex = (val, key) => {
-  if (!val || !key) {
-    console.log("provide a value and a key");
-    return [];
-  }
-  // val = val.toLowerCase()
+const getAllIndex = async (val, dept) => {
   const indexes = [];
+  try {
+    const deptCourseSchedule = await CourseSchedule.findOne({
+      departmentName: dept,
+    });
+    if (!deptCourseSchedule) {
+      return [];
+    }
 
-  for (let i in courseSchedule[key]) {
-    if (courseSchedule[key][i].includes(val)) indexes.push(parseInt(i));
+    for (let i in deptCourseSchedule.schedule) {
+      if (deptCourseSchedule.schedule[i].includes(val)) {
+        indexes.push(i);
+      }
+    }
+    return indexes;
+  } catch (error) {
+    throw error;
   }
-  return indexes;
 };
 
 // find the freetime of a class in {day: "", time:[]}
@@ -107,6 +117,15 @@ function ArrayShuffle(array) {
   }
 
   return array;
+}
+
+async function getCourseSchedules() {
+  try {
+    const courseSchedule = await CourseSchedule.find();
+    return courseSchedule;
+  } catch (error) {
+    throw error;
+  }
 }
 
 //get add to timetable
@@ -358,7 +377,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
         loopFreetimes: for (let freetime of freetimes) {
           let courseRecord = []; //this keeps record of the course that has already been checked;
 
-          loopCourseScheduleKey: for (let key in courseSchedule) {
+          for (let key in courseSchedule) {
             if (course.takenBy.includes(key)) {
               //get the indexes the course is in course schedule
               const indexes = getAllIndex(course.name, key);
@@ -421,6 +440,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
     next(error);
   }
 };
+//this intergrates dynamic courseSchedule
 
 //this will find the days the lecturer has a class and add the class in one of those days,
 //if the instrcutor was never in the timetable or the days they have a timetable is occupied

@@ -6,17 +6,15 @@ const timetableController = require("../controllers/timetable");
 
 const router = Router();
 
-//get add 
+//get add
 //this will send the courses, instructors, classrooms
-router.get("/add",
-  timetableController.getAddToTimetable
-);
+router.get("/add", timetableController.getAddToTimetable);
 
-//post add 
+//post add
 //this is adding to the timetable automaticall
 router.post(
   "/add",
-  isAdmin,
+  // isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
@@ -56,14 +54,9 @@ router.post(
   timetableController.postAddToTimetableManually
 );
 
-router.delete("/:id",
-  isAdmin,
-  timetableController.deleteFromTimetable
-);
+router.delete("/:id", isAdmin, timetableController.deleteFromTimetable);
 
 //this will return the timetables
 router.get("/", timetableController.getTimetable);
-
-
 
 module.exports = router;

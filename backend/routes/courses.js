@@ -16,10 +16,6 @@ router.get("/group/:id", courseController.getGroup);
 //this is getting the course timetable
 router.get("/timetable/:id", courseController.getCourseTimetable);
 
-//get the courses
-//this is getting the courses in the database
-router.get("/", courseController.getCourses);
-
 //add course
 router.post(
   "/add",
@@ -28,12 +24,38 @@ router.post(
     check("classHour").isNumeric().trim(),
     check("name").isAlphanumeric(undefined, { ignore: " " }).trim(),
     check("departmentId").notEmpty().trim(),
-    check("takenBy").isArray(),
   ],
-  // isAdmin,
+  isAdmin,
   courseController.postAddCourse
 );
 
-router.delete("/:id", courseController.deleteCourse);
+//delete a course
+router.delete("/:id", isAdmin, courseController.deleteCourse);
+
+//add the the takenby of a course
+router.post(
+  "/add-takenby/:id",
+  isAdmin,
+  check("dept").isAlpha(undefined, { ignore: " " }),
+  courseController.postAddTakenBy
+);
+
+//get the depts that are not in the
+router.get("/add-takenby/:id", courseController.getAddTakenBy);
+
+//get a particular course with id
+router.get("/:id", courseController.getCourse);
+
+//post remove a dept from takenby
+router.post(
+  "/remove-takenby/:id",
+  isAdmin,
+  check("dept").isAlpha(undefined, { ignore: " " }),
+  courseController.postRemoveTakenBy
+);
+
+//get the courses
+//this is getting the courses in the database
+router.get("/", courseController.getCourses);
 
 module.exports = router;

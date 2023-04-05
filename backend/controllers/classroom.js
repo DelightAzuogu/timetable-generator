@@ -83,7 +83,7 @@ exports.DeleteClassroom = async (req, res, next) => {
     }
 
     classroom.delete();
-    res.status(204).json({ msg: "successsful" });
+    res.status(200).json({ msg: "successsful", timetables });
   } catch (error) {
     next(error);
   }

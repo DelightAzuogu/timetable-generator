@@ -1,12 +1,9 @@
 const bcrypt = require("bcrypt");
 
-const { Classroom } = require("../model/classroom");
-const { Course } = require("../model/course");
 const { Instructor } = require("../model/instructor");
 const { Timetable } = require("../model/timetable");
 const valError = require("../utils/validationError");
 const newError = require("../utils/error");
-const { daysOfWeek, fourHours, threeHours } = require("../utils/daysAndTime");
 const { checkInstructor } = require("../utils/checkInstructor");
 
 //this will get the timetable of the Instructor
@@ -77,6 +74,30 @@ exports.deleteInstructor = async (req, res, next) => {
     //delete the instructor
     instructor.delete();
     res.json({ msg: "successful", timetables });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getInstructors = async (req, res, next) => {
+  try {
+    const instructors = await Instructor.find();
+
+    res.status(200).json({ instructors });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getInstructor = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const instructor = await checkInstructor(id);
+
+    const timetable = await Timetable.find({ instructorId: instructor._id });
+
+    res.status(200).json({ instructor, timetable });
   } catch (error) {
     next(error);
   }

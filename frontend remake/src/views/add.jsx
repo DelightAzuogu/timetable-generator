@@ -164,7 +164,7 @@ const AddToTimetable = (props) => {
           <NotificationAlert ref={notificationAlertRef} />
         </div>
         <form
-          className=" d-block justify-content-center"
+          className="d-block justify-content-center"
           onSubmit={(e) => {
             onSubmit(e);
           }}

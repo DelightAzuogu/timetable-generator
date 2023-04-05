@@ -146,7 +146,7 @@ exports.postAddCourse = async (req, res, next) => {
     //validation error
     valError(req);
 
-    let { courseCode, name, classHour, departmentId, takenBy } = req.body;
+    let { courseCode, name, classHour, departmentId } = req.body;
     name = name.toLowerCase();
 
     if (classHour <= 0 || classHour >= 24) {
@@ -176,26 +176,7 @@ exports.postAddCourse = async (req, res, next) => {
       name,
       classHour,
       department: dept,
-      takenBy: [dept.name],
     };
-
-    //fill the takenBy
-    for (let t of takenBy) {
-      t = t.toLowerCase();
-
-      if (course.takenBy.includes(t) || t == dept.name) {
-        continue;
-      }
-
-      //check if the course department is a valid department
-      const deptCheck = await Department.findOne({ name: t });
-      console.log(deptCheck);
-      if (!deptCheck) {
-        continue;
-      }
-
-      course.takenBy.push(t);
-    }
     course = await Course.create(course);
 
     res.status(201).json({ msg: "successful", course });
@@ -209,10 +190,7 @@ exports.deleteCourse = async (req, res, next) => {
     const { id } = req.params;
 
     //get the course
-    const course = await Course.findOne({ _id: id });
-    if (!course) {
-      throw newError("invalid course", 400);
-    }
+    const course = await checkCourse(id);
 
     //get students that take that course
     const students = await Student.find({ "takes.course": course });
@@ -220,17 +198,93 @@ exports.deleteCourse = async (req, res, next) => {
     //remove that course from the takes
     for (let student of students) {
       student.takes = student.takes.filter((e) => e.course._id !== course._id);
+      student.save();
     }
 
-    //delete the course from timetable
-    await Timetable.deleteMany({ course });
-
-    // save the students
-    students.save();
+    //get the timetable of the course
+    const timetables = await Timetable.find({ course });
+    //delete the timetable
+    for (let timetable of timetables) {
+      timetable.delete();
+    }
 
     //delete the course
-    await Course.deleteOne({ _id: id });
-    res.status(204).json({ msg: "successful" });
+    course.delete();
+    res.status(200).json({ msg: "successful", timetables, students, course });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAddTakenBy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const course = await checkCourse(id);
+
+    const dept = await Department.find();
+
+    const deptName = [];
+    for (let d of dept) {
+      if (!course.takenBy.includes(d.name.toLowerCase())) {
+        console.log(d.name);
+        deptName.push(d.name.toLowerCase());
+      }
+    }
+    res.status(200).json({ departments: deptName });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.postAddTakenBy = async (req, res, next) => {
+  try {
+    valError(req);
+    const { id } = req.params;
+    let { dept } = req.body;
+    dept = dept.toLowerCase();
+    //get course
+    let course = await checkCourse(id);
+
+    //check the department
+    const deptCheck = await Department.findOne({ name: dept });
+    if (!deptCheck) {
+      throw newError("department not found", 400);
+    }
+
+    if (course.takenBy.includes(dept.toLowerCase())) {
+      throw newError("already in the course", 400);
+    }
+
+    course.takenBy.push(dept);
+    course = await course.save();
+    res.status(201).json({ msg: "successful", course });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getCourse = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const course = await checkCourse(id);
+    res.status(200).json({ course });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.postRemoveTakenBy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    let { dept } = req.body;
+    dept = dept.toLowerCase();
+
+    let course = await checkCourse(id);
+
+    course.takenBy = course.takenBy.filter((e) => e != dept);
+
+    course = await course.save();
+    res.status(200).json({ course, msg: "successful" });
   } catch (error) {
     next(error);
   }

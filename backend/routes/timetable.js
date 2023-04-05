@@ -14,7 +14,7 @@ router.get("/add", timetableController.getAddToTimetable);
 //this is adding to the timetable automaticall
 router.post(
   "/add",
-  // isAdmin,
+  isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),

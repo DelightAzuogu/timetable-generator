@@ -10,6 +10,9 @@ const router = Router();
 //this is getting the classroom timetable
 router.get("/timetable/:id", classroomController.getClassroomTimetable);
 
+//get a particular classroom
+router.get("/:id", classroomController.getClassroom);
+
 //get classroom
 //this is getting the classrooms
 router.get("/", classroomController.getClassrooms);

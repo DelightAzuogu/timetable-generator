@@ -1,4 +1,5 @@
 const { Course } = require("../model/course");
+const { Timetable } = require("../model/timetable");
 const { CourseSchedule } = require("../model/courseSchedule");
 const { checkCourse } = require("../utils/checkCourse");
 const { checkDepartment } = require("../utils/checkDepartment");
@@ -22,7 +23,7 @@ const ArrayIndex = (year, semester) => {
 exports.postAddCourseSchedule = async (req, res, next) => {
   try {
     valError(req);
-    let { courses, year, semester, deptName } = req.body;
+    let { course, year, semester, deptName } = req.body;
     deptName = deptName.toLowerCase();
 
     //check semester
@@ -54,16 +55,41 @@ exports.postAddCourseSchedule = async (req, res, next) => {
       };
     }
     const courseArray = courseSchedule.schedule[arrayindex];
-    for (let course of courses) {
-      //check course
-      const c = await checkCourse(course);
+    //check course
+    const c = await checkCourse(course);
 
-      //check if course is already in the schedule
-      if (courseArray.includes(c.name)) {
-        continue;
-      }
-      courseArray.push(c.name);
+    //check if course is already in the schedule
+    if (courseArray.includes(c.name)) {
+      throw newError("course Already in schedule", 400);
     }
+
+    //check if any course already in the schedule have a clashing time
+    if (courseArray.length) {
+      //the the timetalbe of the adding course
+      const addTimetable = await Timetable.find({ "course.name": c.name });
+
+      //loop through all the existing course
+      for (let course of courseArray) {
+        //get the timetable
+        const timetable = await Timetable.find({ "course.name": course });
+        for (let time of timetable) {
+          for (let addTime of addTimetable) {
+            if (addTime.day == time.day) {
+              for (let t of addTime.time) {
+                if (time.time.includes(t)) {
+                  throw newError(
+                    `clashing with ${course} on ${time.day} at ${t}`
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    courseArray.push(c.name);
+
     courseSchedule.schedule[arrayindex] = courseArray;
     if (newSchedule) {
       courseSchedule = await CourseSchedule.create(courseSchedule);
@@ -79,7 +105,7 @@ exports.postAddCourseSchedule = async (req, res, next) => {
 exports.postRemoveCourseSchedule = async (req, res, next) => {
   try {
     valError(req);
-    let { courseNames, year, semester, deptName } = req.body;
+    let { course, year, semester, deptName } = req.body;
     deptName = deptName.toLowerCase();
 
     //check semester
@@ -107,14 +133,9 @@ exports.postRemoveCourseSchedule = async (req, res, next) => {
     }
 
     let courseArray = courseSchedule.schedule[arrayindex];
-    for (let courseName of courseNames) {
-      //check course
-      const course = await Course.findOne({ name: courseName });
-      if (!course) {
-        continue;
-      }
-      courseArray = courseArray.filter((e) => e != course.name);
-    }
+    //check course
+    const c = await checkCourse(course);
+    courseArray = courseArray.filter((e) => e != c.name);
 
     courseSchedule.schedule[arrayindex] = courseArray;
 
@@ -130,7 +151,7 @@ exports.getCourseSchedule = async (req, res, next) => {
   try {
     valError(req);
 
-    let { year, semester, deptName } = req.body;
+    let { year, semester, deptName } = req.query;
     deptName = deptName.toLowerCase();
 
     //check semester

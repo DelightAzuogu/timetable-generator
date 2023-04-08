@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import NotificationAlert from "react-notification-alert";
 
-import { BASE_URL, inputStyle } from "variables/general";
+import { BASE_URL, inputStyle, URL } from "variables/general";
 
 const Classroom = (props) => {
   const [classrooms, setClassrooms] = useState([]);
+  const [classroom, setClassroom] = useState();
+  const [status] = useState(localStorage.getItem("status"));
 
   const getClassrooms = async () => {
     try {
@@ -33,6 +35,25 @@ const Classroom = (props) => {
       autoDismiss: 3,
     };
     notificationAlertRef.current.notificationAlert(options);
+  };
+
+  const onViewClassroom = async (e) => {
+    e.preventDefault();
+    const id = e.target[1].value;
+    try {
+      const res = await fetch(`${BASE_URL}/classroom/${id}`, {
+        method: "GET",
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
+      setClassroom(resData.classroom);
+    } catch (error) {
+      let msg = error.msg || error.error.msg;
+      notify("danger", msg);
+      console.error(error);
+    }
   };
 
   //when it submits
@@ -80,6 +101,7 @@ const Classroom = (props) => {
       } else {
         throw res.json();
       }
+      await getClassrooms();
     } catch (error) {
       console.log(error);
       let msg = error.msg || error.error.msg;
@@ -95,92 +117,23 @@ const Classroom = (props) => {
       <div className="react-notification-alert-container">
         <NotificationAlert ref={notificationAlertRef} />
       </div>
-      {/* //for the add */}
+
+      {/* viewing timetable  */}
       <div style={{ paddingBottom: "20px" }}>
         <form
           className=" d-block justify-content-center border border-3 rounded"
           style={{ backgroundColor: formBackgroundColour }}
           onSubmit={(e) => {
-            onAddSubmit(e);
+            e.preventDefault();
+            window.open(
+              `${URL}/classroom/${e.target[1].value}`,
+              "_blank",
+              "noreferrer"
+            );
           }}
         >
           <fieldset className="" style={{ margin: "20px" }}>
-            <legend>ADD</legend>
-            {/* //for the id */}
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="building">
-                  Building
-                </label>
-              </div>
-
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="text"
-                id="building"
-                name="building"
-                required
-              />
-            </div>
-            {/* {//for the name} */}
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="classNum">
-                  Class Number
-                </label>
-              </div>
-
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="number"
-                id="classNum"
-                name="classNum"
-                required
-              />
-            </div>
-            {/* for the password */}
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="capacity">
-                  Capacity
-                </label>
-              </div>
-
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="number"
-                id="capacity"
-                name="capacity"
-                required
-              />
-            </div>
-            {/* //submit button */}
-            <div className="text-center m-form">
-              <input
-                type="submit"
-                value="Add Classroom"
-                className="btn btn-dark btn-lg"
-              />
-            </div>
-          </fieldset>
-        </form>
-      </div>
-
-      {/* for the delete */}
-      <div style={{ paddingBottom: "20px" }}>
-        {" "}
-        <form
-          className=" d-block justify-content-center border border-3 rounded"
-          style={{ backgroundColor: formBackgroundColour }}
-          onSubmit={(e) => {
-            onDeleteSubmit(e);
-          }}
-        >
-          <fieldset className="" style={{ margin: "20px" }}>
-            <legend>DELETE</legend>
+            <legend>View Classroom Timetable</legend>
             <div className="form-group m-form">
               <select
                 role="menu"
@@ -200,13 +153,181 @@ const Classroom = (props) => {
             <div className="text-center m-form">
               <input
                 type="submit"
-                value="Delete Classrrom"
+                value="View Classrrom Timetable"
                 className="btn btn-dark btn-lg"
               />
             </div>
           </fieldset>
         </form>
       </div>
+
+      {/* //for viewing the classrom  */}
+      <div style={{ paddingBottom: "20px" }}>
+        <form
+          className=" d-block justify-content-center border border-3 rounded"
+          style={{ backgroundColor: formBackgroundColour }}
+          onSubmit={(e) => {
+            onViewClassroom(e);
+          }}
+        >
+          <fieldset className="" style={{ margin: "20px" }}>
+            <legend>View Classroom </legend>
+            <div className="form-group m-form">
+              <select
+                role="menu"
+                id="instructor"
+                className="custom-select form-control from-select"
+              >
+                <option value={0}>Choose an Classroom</option>
+                {/* where the map is */}
+                {classrooms.map((classroom) => (
+                  <option key={classroom._id} value={classroom._id}>
+                    {`${classroom.building} ${classroom.classNum}`}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {classroom && (
+              <div
+                className=" border border-3 rounded"
+                style={{
+                  color: "white",
+                }}
+              >
+                <div style={{ margin: "20px" }}>
+                  {`${classroom.building}${classroom.classNum} `}
+                  <br />
+                  {`Capacity: ${classroom.capacity}`}
+                </div>
+              </div>
+            )}
+            {/* //submit button */}
+            <div className="text-center m-form">
+              <input
+                type="submit"
+                value="View Classrrom"
+                className="btn btn-dark btn-lg"
+              />
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      {status === "admin" && (
+        <div>
+          {/* //for the add */}
+          <div style={{ paddingBottom: "20px" }}>
+            <form
+              className=" d-block justify-content-center border border-3 rounded"
+              style={{ backgroundColor: formBackgroundColour }}
+              onSubmit={(e) => {
+                onAddSubmit(e);
+              }}
+            >
+              <fieldset className="" style={{ margin: "20px" }}>
+                <legend>ADD</legend>
+                {/* //for the id */}
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="building">
+                      Building
+                    </label>
+                  </div>
+
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="text"
+                    id="building"
+                    name="building"
+                    required
+                  />
+                </div>
+                {/* {//for the name} */}
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="classNum">
+                      Class Number
+                    </label>
+                  </div>
+
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="number"
+                    id="classNum"
+                    name="classNum"
+                    required
+                  />
+                </div>
+                {/* for the password */}
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="capacity">
+                      Capacity
+                    </label>
+                  </div>
+
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="number"
+                    id="capacity"
+                    name="capacity"
+                    required
+                  />
+                </div>
+                {/* //submit button */}
+                <div className="text-center m-form">
+                  <input
+                    type="submit"
+                    value="Add Classroom"
+                    className="btn btn-dark btn-lg"
+                  />
+                </div>
+              </fieldset>
+            </form>
+          </div>
+
+          {/* for the delete */}
+          <div style={{ paddingBottom: "20px" }}>
+            <form
+              className=" d-block justify-content-center border border-3 rounded"
+              style={{ backgroundColor: formBackgroundColour }}
+              onSubmit={(e) => {
+                onDeleteSubmit(e);
+              }}
+            >
+              <fieldset className="" style={{ margin: "20px" }}>
+                <legend>DELETE</legend>
+                <div className="form-group m-form">
+                  <select
+                    role="menu"
+                    id="instructor"
+                    className="custom-select form-control from-select"
+                  >
+                    <option value={0}>Choose an Classroom</option>
+                    {/* where the map is */}
+                    {classrooms.map((classroom) => (
+                      <option key={classroom._id} value={classroom._id}>
+                        {`${classroom.building} ${classroom.classNum}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* //submit button */}
+                <div className="text-center m-form">
+                  <input
+                    type="submit"
+                    value="Delete Classrrom"
+                    className="btn btn-dark btn-lg"
+                  />
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

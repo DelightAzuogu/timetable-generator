@@ -25,6 +25,16 @@ exports.getClassroomTimetable = async (req, res, next) => {
   }
 };
 
+exports.getClassroom = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const classroom = await checkClassroom(id);
+    res.status(200).json({ classroom });
+  } catch (error) {
+    next(error);
+  }
+};
+
 //this will return the classrooms
 exports.getClassrooms = async (req, res, next) => {
   try {

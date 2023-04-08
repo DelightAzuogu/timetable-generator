@@ -9,6 +9,7 @@ const Student = (props) => {
   const [students, setStudents] = useState([]);
   const [courses, setCourses] = useState([]);
   const [student, setStudent] = useState();
+  const [status] = useState(localStorage.getItem("status"));
 
   useEffect(() => {
     //getting the department
@@ -291,11 +292,12 @@ const Student = (props) => {
                   <br />
                   Courses taken
                   <ul>
-                    {student.takes.map((take) => (
-                      <li>
-                        {`${take.course._id} ${take.course.name} -- G${take.group}`}
-                      </li>
-                    ))}
+                    {student.takes &&
+                      student.takes.map((take, i) => (
+                        <li key={i}>
+                          {`${take.course._id} ${take.course.name} -- G${take.group}`}
+                        </li>
+                      ))}
                   </ul>
                 </div>
               </div>
@@ -313,265 +315,269 @@ const Student = (props) => {
         </form>
       </div>
 
-      {/* //for adding a new student  */}
-      <div style={{ paddingBottom: "20px" }}>
-        <form
-          className=" d-block justify-content-center  border border-3 rounded"
-          style={{ backgroundColor: formBackgroundColour }}
-          onSubmit={(e) => {
-            onAddSubmit(e);
-          }}
-        >
-          <fieldset className="" style={{ margin: "20px" }}>
-            <legend>ADD</legend>
+      {status === "admin" && (
+        <div>
+          {/* //for adding a new student  */}
+          <div style={{ paddingBottom: "20px" }}>
+            <form
+              className=" d-block justify-content-center  border border-3 rounded"
+              style={{ backgroundColor: formBackgroundColour }}
+              onSubmit={(e) => {
+                onAddSubmit(e);
+              }}
+            >
+              <fieldset className="" style={{ margin: "20px" }}>
+                <legend>ADD</legend>
 
-            {/* //for the id */}
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="id">
-                  ID
-                </label>
-              </div>
+                {/* //for the id */}
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="id">
+                      ID
+                    </label>
+                  </div>
 
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="number"
-                id="id"
-                name="id"
-                required
-              />
-            </div>
-            {/* {//for the name} */}
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="firstname">
-                  First Name
-                </label>
-              </div>
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="number"
+                    id="id"
+                    name="id"
+                    required
+                  />
+                </div>
+                {/* {//for the name} */}
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="firstname">
+                      First Name
+                    </label>
+                  </div>
 
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="text"
-                id="firstname"
-                name="firstname"
-                required
-              />
-            </div>
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="lastname">
-                  Last Name
-                </label>
-              </div>
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="text"
+                    id="firstname"
+                    name="firstname"
+                    required
+                  />
+                </div>
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="lastname">
+                      Last Name
+                    </label>
+                  </div>
 
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="text"
-                id="lastname"
-                name="lastname"
-                required
-              />
-            </div>
-            {/* for the <departments /> */}
-            <div className="form-group m-form">
-              <select
-                role="menu"
-                className="custom-select form-control from-select"
-              >
-                <option value={0}>Choose an Department</option>
-                {/* where the map is */}
-                {departments.map((dept) => (
-                  <option key={dept._id} value={dept._id}>
-                    {`${dept.name}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* //submit button */}
-            <div className="text-center m-form">
-              <input
-                type="submit"
-                value="Add Student"
-                className="btn btn-dark btn-lg"
-              />
-            </div>
-          </fieldset>
-        </form>
-      </div>
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="text"
+                    id="lastname"
+                    name="lastname"
+                    required
+                  />
+                </div>
+                {/* for the <departments /> */}
+                <div className="form-group m-form">
+                  <select
+                    role="menu"
+                    className="custom-select form-control from-select"
+                  >
+                    <option value={0}>Choose an Department</option>
+                    {/* where the map is */}
+                    {departments.map((dept) => (
+                      <option key={dept._id} value={dept._id}>
+                        {`${dept.name}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* //submit button */}
+                <div className="text-center m-form">
+                  <input
+                    type="submit"
+                    value="Add Student"
+                    className="btn btn-dark btn-lg"
+                  />
+                </div>
+              </fieldset>
+            </form>
+          </div>
 
-      {/* //for the delete  */}
-      <div style={{ paddingBottom: "20px" }}>
-        <form
-          className=" d-block justify-content-center  border border-3 rounded"
-          style={{ backgroundColor: formBackgroundColour }}
-          onSubmit={(e) => {
-            onDeleteSubmit(e);
-          }}
-        >
-          <fieldset className="" style={{ margin: "20px" }}>
-            <legend>DELETE</legend>
-            <div className="form-group m-form">
-              <select
-                role="menu"
-                className="custom-select form-control from-select"
-              >
-                <option value={0}>Choose an Student</option>
-                {/* where the map is */}
-                {students.map((student) => (
-                  <option key={student._id} value={student._id}>
-                    {`${student._id} ${student.name.first} ${student.name.last}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* //submit button */}
-            <div className="text-center m-form">
-              <input
-                type="submit"
-                value="Delete Student"
-                className="btn btn-dark btn-lg"
-              />
-            </div>
-          </fieldset>
-        </form>
-      </div>
+          {/* //for the delete  */}
+          <div style={{ paddingBottom: "20px" }}>
+            <form
+              className=" d-block justify-content-center  border border-3 rounded"
+              style={{ backgroundColor: formBackgroundColour }}
+              onSubmit={(e) => {
+                onDeleteSubmit(e);
+              }}
+            >
+              <fieldset className="" style={{ margin: "20px" }}>
+                <legend>DELETE</legend>
+                <div className="form-group m-form">
+                  <select
+                    role="menu"
+                    className="custom-select form-control from-select"
+                  >
+                    <option value={0}>Choose an Student</option>
+                    {/* where the map is */}
+                    {students.map((student) => (
+                      <option key={student._id} value={student._id}>
+                        {`${student._id} ${student.name.first} ${student.name.last}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* //submit button */}
+                <div className="text-center m-form">
+                  <input
+                    type="submit"
+                    value="Delete Student"
+                    className="btn btn-dark btn-lg"
+                  />
+                </div>
+              </fieldset>
+            </form>
+          </div>
 
-      {/* //for the adding to student courses */}
-      <div style={{ paddingBottom: "20px" }}>
-        <form
-          className=" d-block justify-content-center  border border-3 rounded"
-          style={{ backgroundColor: formBackgroundColour }}
-          onSubmit={(e) => {
-            onAddStudentCourseSubmit(e);
-          }}
-        >
-          <fieldset className="" style={{ margin: "20px" }}>
-            <legend>Add Course To Student</legend>
-            <div className="form-group m-form">
-              <select
-                role="menu"
-                className="custom-select form-control from-select"
-              >
-                <option value={0}>Choose an student</option>
-                {/* where the map is */}
-                {students.map((student) => (
-                  <option key={student._id} value={student._id}>
-                    {`${student._id} ${student.name.first} ${student.name.last}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group m-form">
-              <select
-                role="menu"
-                className="custom-select form-control from-select"
-              >
-                <option value={0}>Choose an Course</option>
-                {/* where the map is */}
-                {courses.map((course) => (
-                  <option key={course._id} value={course._id}>
-                    {`${course._id} ${course.name}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="group">
-                  Group
-                </label>
-              </div>
+          {/* //for the adding to student courses */}
+          <div style={{ paddingBottom: "20px" }}>
+            <form
+              className=" d-block justify-content-center  border border-3 rounded"
+              style={{ backgroundColor: formBackgroundColour }}
+              onSubmit={(e) => {
+                onAddStudentCourseSubmit(e);
+              }}
+            >
+              <fieldset className="" style={{ margin: "20px" }}>
+                <legend>Add Course To Student</legend>
+                <div className="form-group m-form">
+                  <select
+                    role="menu"
+                    className="custom-select form-control from-select"
+                  >
+                    <option value={0}>Choose an student</option>
+                    {/* where the map is */}
+                    {students.map((student) => (
+                      <option key={student._id} value={student._id}>
+                        {`${student._id} ${student.name.first} ${student.name.last}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group m-form">
+                  <select
+                    role="menu"
+                    className="custom-select form-control from-select"
+                  >
+                    <option value={0}>Choose an Course</option>
+                    {/* where the map is */}
+                    {courses.map((course) => (
+                      <option key={course._id} value={course._id}>
+                        {`${course._id} ${course.name}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="group">
+                      Group
+                    </label>
+                  </div>
 
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="number"
-                id="group"
-                name="group"
-                required
-              />
-            </div>
-            {/* //submit button */}
-            <div className="text-center m-form">
-              <input
-                type="submit"
-                value="Delete Student"
-                className="btn btn-dark btn-lg"
-              />
-            </div>
-          </fieldset>
-        </form>
-      </div>
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="number"
+                    id="group"
+                    name="group"
+                    required
+                  />
+                </div>
+                {/* //submit button */}
+                <div className="text-center m-form">
+                  <input
+                    type="submit"
+                    value="Delete Student"
+                    className="btn btn-dark btn-lg"
+                  />
+                </div>
+              </fieldset>
+            </form>
+          </div>
 
-      {/* //for the removing of course from student  */}
-      <div style={{ paddingBottom: "20px" }}>
-        <form
-          className=" d-block justify-content-center  border border-3 rounded"
-          style={{ backgroundColor: formBackgroundColour }}
-          onSubmit={(e) => {
-            onRemoveStudentCourseSubmit(e);
-          }}
-        >
-          <fieldset className="" style={{ margin: "20px" }}>
-            <legend>Remove Course From Student</legend>
-            <div className="form-group m-form">
-              <select
-                role="menu"
-                className="custom-select form-control from-select"
-              >
-                <option value={0}>Choose an student</option>
-                {/* where the map is */}
-                {students.map((student) => (
-                  <option key={student._id} value={student._id}>
-                    {`${student._id} ${student.name.first} ${student.name.last}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group m-form">
-              <select
-                role="menu"
-                className="custom-select form-control from-select"
-              >
-                <option value={0}>Choose an Course</option>
-                {/* where the map is */}
-                {courses.map((course) => (
-                  <option key={course._id} value={course._id}>
-                    {`${course._id} ${course.name}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="input-group m-form">
-              <div className="input-group-prepend">
-                <label className="input-group-text" htmlFor="group">
-                  Group
-                </label>
-              </div>
+          {/* //for the removing of course from student  */}
+          <div style={{ paddingBottom: "20px" }}>
+            <form
+              className=" d-block justify-content-center  border border-3 rounded"
+              style={{ backgroundColor: formBackgroundColour }}
+              onSubmit={(e) => {
+                onRemoveStudentCourseSubmit(e);
+              }}
+            >
+              <fieldset className="" style={{ margin: "20px" }}>
+                <legend>Remove Course From Student</legend>
+                <div className="form-group m-form">
+                  <select
+                    role="menu"
+                    className="custom-select form-control from-select"
+                  >
+                    <option value={0}>Choose an student</option>
+                    {/* where the map is */}
+                    {students.map((student) => (
+                      <option key={student._id} value={student._id}>
+                        {`${student._id} ${student.name.first} ${student.name.last}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group m-form">
+                  <select
+                    role="menu"
+                    className="custom-select form-control from-select"
+                  >
+                    <option value={0}>Choose an Course</option>
+                    {/* where the map is */}
+                    {courses.map((course) => (
+                      <option key={course._id} value={course._id}>
+                        {`${course._id} ${course.name}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="input-group m-form">
+                  <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor="group">
+                      Group
+                    </label>
+                  </div>
 
-              <input
-                style={inputStyle}
-                className="form-control"
-                type="number"
-                id="group"
-                name="group"
-                required
-              />
-            </div>
-            {/* //submit button */}
-            <div className="text-center m-form">
-              <input
-                type="submit"
-                value="Delete Student"
-                className="btn btn-dark btn-lg"
-              />
-            </div>
-          </fieldset>
-        </form>
-      </div>
+                  <input
+                    style={inputStyle}
+                    className="form-control"
+                    type="number"
+                    id="group"
+                    name="group"
+                    required
+                  />
+                </div>
+                {/* //submit button */}
+                <div className="text-center m-form">
+                  <input
+                    type="submit"
+                    value="Delete Student"
+                    className="btn btn-dark btn-lg"
+                  />
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

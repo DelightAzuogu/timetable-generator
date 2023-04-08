@@ -4,12 +4,7 @@ const { Instructor } = require("../model/instructor");
 const { Timetable } = require("../model/timetable");
 const valError = require("../utils/validationError");
 const newError = require("../utils/error");
-const {
-  daysOfWeek,
-  fourHours,
-  threeHours,
-  times,
-} = require("../utils/daysAndTime");
+const { times } = require("../utils/daysAndTime");
 const { Student } = require("../model/student");
 const { checkCourse } = require("../utils/checkCourse");
 const { Department } = require("../model/department");
@@ -79,6 +74,8 @@ exports.getCompareTimetable = async (req, res, next) => {
       for (let g of group) {
         if (g === 0) continue;
         const courseStudents = await Student.find({ "takes.course": course });
+
+        console.log(courseStudents);
         const courseGroupStudents = courseStudents.filter((e) => {
           const index = e.takes.findIndex((c) => c.course._id == course._id);
           return e.takes[index].group == g;
@@ -285,6 +282,76 @@ exports.postRemoveTakenBy = async (req, res, next) => {
 
     course = await course.save();
     res.status(200).json({ course, msg: "successful" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getStudentCourse = async (req, res, next) => {
+  try {
+    console.log("dddd");
+    let { id, group } = req.query;
+
+    if (!id) throw newError("invalid id", 400);
+
+    //get the course
+    const course = await checkCourse(id);
+
+    let students = [];
+    if (!group) {
+      //get the students that take the course
+      students = await Student.find({ "takes.course": course });
+    } else {
+      //this is to split the group numbers that was sent to an array
+      group = group.split(",");
+      for (let g of group) {
+        if (g === 0) continue;
+        const courseStudents = await Student.find({ "takes.course": course });
+
+        const courseGroupStudents = courseStudents.filter((e) => {
+          const index = e.takes.findIndex((c) => c.course._id == course._id);
+          return e.takes[index].group == g;
+        });
+        loopCourseGroupStudents: for (let s of courseGroupStudents) {
+          //make sure i am not going to check for a timetable twice
+          for (student of students) {
+            if (student._id === s._id) continue loopCourseGroupStudents;
+          }
+          students.push(s);
+        }
+      }
+    }
+
+    let { time, day, studentCount } = req.query;
+    day = day.toLowerCase();
+
+    const studentCourseArray = [];
+    let i = 0;
+
+    loopstudent: for (let student of students) {
+      if (i >= studentCount) break;
+      for (let take of student.takes) {
+        if (i >= studentCount) break loopstudent;
+        const timetable = await Timetable.findOne({
+          "course.name": take.course.name,
+          group: take.group,
+          day,
+          time,
+        });
+        // console.log(timetable);
+        if (timetable) {
+          studentCourseArray.push({
+            id: student._id,
+            name: `${student.name.first} ${student.name.last}`,
+            courseId: timetable.course._id,
+            courseName: timetable.course.name,
+          });
+          i++;
+        }
+      }
+    }
+    // console.log(studentCourseArray);
+    res.status(200).json({ studentCourseArray });
   } catch (error) {
     next(error);
   }

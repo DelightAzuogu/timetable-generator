@@ -8,37 +8,28 @@ const router = Router();
 
 router.post(
   "/add",
-  // isAdmin,
+  isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }),
-    check("courses").isArray(),
+    check("course").isAlphanumeric().trim(),
     check("year").isNumeric().trim(),
-    check("semester").isAlphanumeric().trim(),
+    check("semester").isNumeric().trim(),
   ],
   courseScheduleController.postAddCourseSchedule
 );
 
 router.post(
   "/remove",
-  // isAdmin,
+  isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
-    check("courseNames").isArray(),
+    check("course").isAlphanumeric().trim(),
     check("year").isNumeric().trim(),
     check("semester").isAlphanumeric().trim(),
   ],
   courseScheduleController.postRemoveCourseSchedule
 );
 
-router.get(
-  "/",
-  // isAdmin,
-  [
-    check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
-    check("year").isNumeric().trim(),
-    check("semester").isAlphanumeric().trim(),
-  ],
-  courseScheduleController.getCourseSchedule
-);
+router.get("/", courseScheduleController.getCourseSchedule);
 
 module.exports = router;

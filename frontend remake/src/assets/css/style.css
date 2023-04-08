@@ -26,8 +26,10 @@ td {
   border: solid white !important;
   border-width: 1px !important;
   color: white;
-  /* font-size: 17px; */
+  /* width: 20px; */
+  margin: 0px;
 }
+
 
 @media print {
   table {

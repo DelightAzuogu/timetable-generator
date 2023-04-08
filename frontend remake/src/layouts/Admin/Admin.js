@@ -9,7 +9,6 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import routes from "routes.js";
 
-
 var ps;
 
 function Admin(props) {
@@ -23,7 +22,7 @@ function Admin(props) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
       ps = new PerfectScrollbar(mainPanelRef.current, {
-        suppressScrollX: true
+        suppressScrollX: true,
       });
       let tables = document.querySelectorAll(".table-responsive");
       for (let i = 0; i < tables.length; i++) {
@@ -83,12 +82,9 @@ function Admin(props) {
   };
   return (
     <React.Fragment>
-      <div className="wrapper">
-        <Sidebar
-          routes={routes}
-          toggleSidebar={toggleSidebar}
-        />
-        <div className="main-panel" ref={mainPanelRef} >
+      <div className="wrapper" style={{ fontFamily: "unset" }}>
+        <Sidebar routes={routes} toggleSidebar={toggleSidebar} />
+        <div className="main-panel" ref={mainPanelRef}>
           <AdminNavbar
             brandText={getBrandText(location.pathname)}
             toggleSidebar={toggleSidebar}

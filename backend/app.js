@@ -60,7 +60,7 @@ app.use("/student", studentRoute);
 app.use("/department", departmentRoute);
 
 //courseSchedile router
-app.use("/course-schdeule", courseScheduleRoute);
+app.use("/course-schedule", courseScheduleRoute);
 
 app.use("/", (req, res, next) => {
   res.status(404).json({ msg: "route not found" });

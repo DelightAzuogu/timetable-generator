@@ -2,11 +2,11 @@ import AddToTimetable from "views/add";
 import CourseTimetableCompareView from "views/CourseTimetableCompareView";
 import StudentsTimetableCompareView from "views/studentsTimetableCompare";
 import RemoveTimetable from "views/removeTimetable";
-import View from "views/view";
 import Instructor from "views/Instructor";
 import Classroom from "views/Classroom";
 import Course from "views/Course";
 import Student from "views/Students";
+import CourseSchedule from "views/courseSchedule";
 
 //this route is for the admin
 var routes = [
@@ -41,30 +41,6 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/view-instructor",
-    name: "View Instructor Timetable",
-    component: View,
-    layout: "/admin",
-  },
-  {
-    path: "/view-classroom",
-    name: "View Classroom Timetable",
-    component: View,
-    layout: "/admin",
-  },
-  {
-    path: "/view-course",
-    name: "View Courses Timetable",
-    component: View,
-    layout: "/admin",
-  },
-  {
-    path: "/view-student",
-    name: "View Student Timetable",
-    component: View,
-    layout: "/admin",
-  },
-  {
     path: "/instructor",
     name: "Instructor",
     component: Instructor,
@@ -86,6 +62,12 @@ var routes = [
     path: "/student",
     name: "Student",
     component: Student,
+    layout: "/admin",
+  },
+  {
+    path: "/shedule-course",
+    name: "Course Schedule",
+    component: CourseSchedule,
     layout: "/admin",
   },
 ];

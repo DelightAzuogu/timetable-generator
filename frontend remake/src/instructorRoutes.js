@@ -1,6 +1,8 @@
+import Classroom from "views/Classroom";
+import Course from "views/Course";
 import CourseTimetableCompareView from "views/CourseTimetableCompareView";
+import Student from "views/Students";
 import StudentsTimetableCompareView from "views/studentsTimetableCompare";
-import View from "views/view";
 
 var routes = [
   {
@@ -19,20 +21,20 @@ var routes = [
 
   {
     path: "/classroom",
-    name: "View Classroom Timetable",
-    component: View,
+    name: "Classroom",
+    component: Classroom,
     layout: "/instructor",
   },
   {
     path: "/course",
-    name: "View Courses Timetable",
-    component: View,
+    name: "Course",
+    component: Course,
     layout: "/instructor",
   },
   {
     path: "/student",
-    name: "View Student Timetable",
-    component: View,
+    name: "Student",
+    component: Student,
     layout: "/instructor",
   },
 ];

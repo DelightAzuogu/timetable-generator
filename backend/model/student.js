@@ -12,12 +12,16 @@ const studentSchema = new Schema({
     type: departmentSchema,
     required: true,
   },
-  takes: [
-    {
-      course: { type: courseSchema, required: true },
-      group: { type: Number, required: true },
-    },
-  ],
+  takes: {
+    type: [
+      {
+        course: courseSchema,
+        group: Number,
+      },
+    ],
+    default: undefined,
+    unique: false,
+  },
 });
 
 exports.Student = mongoose.model("Student", studentSchema);

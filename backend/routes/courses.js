@@ -12,6 +12,8 @@ router.get("/compare-timetable", courseController.getCompareTimetable);
 
 router.get("/group/:id", courseController.getGroup);
 
+router.get("/time/details", courseController.getStudentCourse);
+
 //get course-timetable
 //this is getting the course timetable
 router.get("/timetable/:id", courseController.getCourseTimetable);

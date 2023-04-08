@@ -16,8 +16,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <Route render={(props) =>
-      < App {...props} />
-    } />
+    <Route render={(props) => <App {...props} />} />
   </BrowserRouter>
 );

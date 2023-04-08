@@ -14,6 +14,8 @@ router.get(
   studentController.getCompareTimetables
 );
 
+router.get("/time/details", studentController.getStudentsWithTimeDate);
+
 //this will get the timetable of the student with id
 router.get("/timetable/:id", studentController.getStudentTimetable);
 

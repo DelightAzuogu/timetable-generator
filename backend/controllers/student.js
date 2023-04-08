@@ -20,13 +20,16 @@ exports.getStudentTimetable = async (req, res, next) => {
 
     let timetable = [];
     //get the timetable of each individual course the student takes and pust it to the timetable array above
-    for (let course of student.takes) {
-      const courseTimetable = await Timetable.find({
-        course: course.course,
-        group: course.group,
-      });
-      for (let c of courseTimetable) {
-        timetable.push(c);
+
+    if (student.timetable) {
+      for (let course of student.takes) {
+        const courseTimetable = await Timetable.find({
+          course: course.course,
+          group: course.group,
+        });
+        for (let c of courseTimetable) {
+          timetable.push(c);
+        }
       }
     }
     res.status(200).json({ timetable, msg: "success", student });
@@ -60,6 +63,8 @@ exports.getCompareTimetables = async (req, res, next) => {
       //get the student
       const student = await Student.findOne({ _id: s });
       if (!student) continue;
+      if (!student.takes) continue;
+
       for (let take of student.takes) {
         const timetable = await Timetable.findOne({
           course: take.course,
@@ -124,11 +129,13 @@ exports.postAddStudent = async (req, res, next) => {
       throw newError("invalise department", 400);
     }
 
-    const student = await Student.create({
+    let student = {
       _id: id,
       name: { first: firstName, last: lastName },
       department: deptCheck,
-    });
+    };
+
+    student = await Student.create(student);
 
     res.status(201).json({ student, msg: "successful" });
   } catch (error) {
@@ -165,16 +172,22 @@ exports.postAddtakes = async (req, res, next) => {
     }
 
     //check if student has that course with that group
-    for (let take of student.takes) {
-      if (take.course._id == course._id && take.group == group) {
-        throw newError("course with group already in student", 400);
+    if (student.takes) {
+      for (let take of student.takes) {
+        if (take.course._id == course._id && take.group == group) {
+          throw newError("course with group already in student", 400);
+        }
       }
+
+      //add the the course and gruop to student
+      student.takes.push({ course, group });
+
+      student = await student.save();
+    } else {
+      const takes = { course, group };
+      student.takes = [takes];
+      student = await student.save();
     }
-
-    //add the the course and gruop to student
-    student.takes.push({ course, group });
-
-    student = await student.save();
     res.status(200).json({ student, msg: "successful" });
   } catch (error) {
     next(error);
@@ -190,6 +203,10 @@ exports.postRemoveTakes = async (req, res, next) => {
     //check student
     let student = await checkStudent(id);
 
+    if (!student.takes) {
+      throw newError("student is not taking any courses", 400);
+    }
+
     //check course
     const course = await checkCourse(courseId);
 
@@ -202,7 +219,7 @@ exports.postRemoveTakes = async (req, res, next) => {
     });
 
     if (newTakes.length == student.takes.length) {
-      throw newError("student does not take the course with that group");
+      throw newError("student does not take the course with that group", 400);
     }
 
     student = await student.save();
@@ -214,6 +231,7 @@ exports.postRemoveTakes = async (req, res, next) => {
 
 exports.getStudent = async (req, res, next) => {
   try {
+    console.log("11111123456786756453423");
     const { id } = req.params;
 
     let student = await Student.findOne({ _id: id });
@@ -221,6 +239,49 @@ exports.getStudent = async (req, res, next) => {
       throw newError("invalid student", 400);
     }
     res.status(200).json({ student });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//experiment
+exports.getStudentsWithTimeDate = async (req, res, next) => {
+  console.log("deeddeededeededdeddkkdkdkdkk");
+  try {
+    let { time, day, studentsId, studentCount } = req.query;
+    studentsId = studentsId.split(",");
+    day = day.toLowerCase();
+
+    const studentCourseArray = [];
+    let i = 0;
+    //iterate through the students
+    loopstudent: for (let studentid of studentsId) {
+      if (i >= studentCount) break;
+      //get the student
+      const student = await checkStudent(studentid);
+      if (!student.takes) continue;
+      for (let take of student.takes) {
+        if (i >= studentCount) break loopstudent;
+        const timetable = await Timetable.findOne({
+          "course.name": take.course.name,
+          group: take.group,
+          day,
+          time,
+        });
+        // console.log(timetable);
+        if (timetable) {
+          studentCourseArray.push({
+            id: student._id,
+            name: `${student.name.first} ${student.name.last}`,
+            courseId: timetable.course._id,
+            courseName: timetable.course.name,
+          });
+          i++;
+        }
+      }
+    }
+    // console.log(studentCourseArray);
+    res.status(200).json({ studentCourseArray });
   } catch (error) {
     next(error);
   }

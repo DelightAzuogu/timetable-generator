@@ -2,6 +2,7 @@ import React from "react";
 
 const TimetableCompareView = (props) => {
   const timetableCount = props.timetableCount;
+  console.log(timetableCount);
   let i = 1;
   return (
     <>
@@ -31,11 +32,7 @@ const TimetableCompareView = (props) => {
                   {time.map((t, index) => {
                     if (typeof t === "string") {
                       return (
-                        <th
-                          key={i++}
-                          // scope="row"
-                          style={{ fontFamily: "sans-serif" }}
-                        >
+                        <th key={i++} style={{ fontFamily: "sans-serif" }}>
                           {t}
                         </th>
                       );

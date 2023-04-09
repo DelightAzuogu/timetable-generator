@@ -13,20 +13,18 @@ exports.getStudentTimetable = async (req, res, next) => {
     const { id } = req.params;
 
     //get the student
-    const student = await Student.findOne({ _id: id });
-    if (!student) {
-      throw newError("invalid student", 400);
-    }
+    const student = await checkStudent(id);
 
     let timetable = [];
     //get the timetable of each individual course the student takes and pust it to the timetable array above
 
-    if (student.timetable) {
+    if (student.takes) {
       for (let course of student.takes) {
         const courseTimetable = await Timetable.find({
           course: course.course,
           group: course.group,
         });
+        console.log(courseTimetable);
         for (let c of courseTimetable) {
           timetable.push(c);
         }

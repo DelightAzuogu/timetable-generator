@@ -17,13 +17,16 @@ const Timetable = (props) => {
     "friday",
   ]);
 
+  const [clickCourses, setClickCourses] = useState();
+  const [clickTimeDay, setClickTimeDay] = useState();
+
   const page = props.location.pathname.split("/")[1];
   let { id } = useParams();
   if (!id) {
     id = props.location.pathname.split("/")[2];
   }
 
-  var timetableitems = [[], [], [], [], []];
+  var timetableitems = [];
 
   //component did mount
   useEffect(() => {
@@ -62,6 +65,7 @@ const Timetable = (props) => {
   }, [id, page]);
 
   for (let i = 0; i < day.length; i++) {
+    timetableitems[i] = [];
     for (let j = 0; j < time.length; j++) {
       //
       const times = timetable.filter((e) => {
@@ -76,35 +80,71 @@ const Timetable = (props) => {
             details += `G${time.group}______${time.classroom.building}  ${time.classroom.classNum} \n\n`;
           }
           timetableitems[i].push(
-            <td style={{ width: "1%", whiteSpace: "nowrap" }}>{details}</td>
+            <td
+              onClick={() => {
+                onTimetableClick(times, j);
+              }}
+              style={{ width: "1%", whiteSpace: "nowrap" }}
+            >
+              {details}
+            </td>
           );
         } else if (page === "classroom") {
           for (let time of times) {
             details += `${time.course._id} ${time.course.name}`;
           }
           timetableitems[i].push(
-            <td style={{ width: "1%", whiteSpace: "nowrap" }}>{details}</td>
+            <td
+              onClick={() => {
+                onTimetableClick(times, j);
+              }}
+              style={{ width: "1%", whiteSpace: "nowrap" }}
+            >
+              {details}
+            </td>
           );
         } else {
           for (let time of times) {
-            details += `${time.course._id} ${time.course.name} ${time.classroom.building}${time.classroom.classNum}\n\n`;
+            details += `${time.course._id} ${time.course.name} -- ${time.classroom.building}${time.classroom.classNum}\n\n`;
           }
           timetableitems[i].push(
-            <td style={{ width: "1%", whiteSpace: "nowrap" }}>{details}</td>
+            <td
+              style={{ width: "1%", whiteSpace: "nowrap" }}
+              onClick={() => {
+                onTimetableClick(times, j);
+              }}
+            >
+              {details}
+            </td>
           );
         }
       } else {
-        timetableitems[i].push(
-          <td
-            style={{
-              height: "70px",
-              width: "1000px",
-            }}
-          ></td>
-        );
+        timetableitems[i].push(<td></td>);
       }
     }
   }
+
+  const onTimetableClick = async (times, t) => {
+    // console.log(times);
+    try {
+      const timess = [];
+      for (let time of times) {
+        const res = await fetch(`${BASE_URL}/instructor/${time.instructorId}`, {
+          method: "GET",
+        });
+        if (!res.ok) {
+          throw await res.json();
+        }
+        const resData = await res.json();
+        timess.push({ ...time, ...resData.instructor });
+      }
+      setClickCourses(timess);
+      setClickTimeDay({ day: times[0].day, time: time[t] });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div
@@ -137,28 +177,25 @@ const Timetable = (props) => {
       </div>
       <div
         style={{
-          height: "1000px",
           width: "1000px",
-          marginLeft: "100px",
+          marginLeft: "10px",
           marginTop: "20px",
         }}
       >
         <table>
           <thead>
             <tr>
-              <td></td>
-              <td>Monday</td>
-              <td>Tuesday</td>
-              <td>Wednessday</td>
-              <td>Thursday</td>
-              <td>Friday</td>
+              <td width={"50px"}></td>
+              <td width={"100px"}>Monday</td>
+              <td width={"100px"}>Tuesday</td>
+              <td width={"100px"}>Wednessday</td>
+              <td width={"100px"}>Thursday</td>
+              <td width={"100px"}>Friday</td>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                9:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>9:00</th>
               {timetableitems[0][0]}
               {timetableitems[1][0]}
               {timetableitems[2][0]}
@@ -166,9 +203,7 @@ const Timetable = (props) => {
               {timetableitems[4][0]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                10:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>10:00</th>
               {timetableitems[0][1]}
               {timetableitems[1][1]}
               {timetableitems[2][1]}
@@ -176,9 +211,7 @@ const Timetable = (props) => {
               {timetableitems[4][1]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                11:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>11:00</th>
               {timetableitems[0][2]}
               {timetableitems[1][2]}
               {timetableitems[2][2]}
@@ -186,9 +219,7 @@ const Timetable = (props) => {
               {timetableitems[4][2]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                12:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>12:00</th>
               {timetableitems[0][3]}
               {timetableitems[1][3]}
               {timetableitems[2][3]}
@@ -196,9 +227,7 @@ const Timetable = (props) => {
               {timetableitems[4][3]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                13:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>13:00</th>
               {timetableitems[0][4]}
               {timetableitems[1][4]}
               {timetableitems[2][4]}
@@ -206,9 +235,7 @@ const Timetable = (props) => {
               {timetableitems[4][4]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                14:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>14:00</th>
               {timetableitems[0][5]}
               {timetableitems[1][5]}
               {timetableitems[2][5]}
@@ -216,9 +243,7 @@ const Timetable = (props) => {
               {timetableitems[4][5]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                15:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>15:00</th>
               {timetableitems[0][6]}
               {timetableitems[1][6]}
               {timetableitems[2][6]}
@@ -226,9 +251,7 @@ const Timetable = (props) => {
               {timetableitems[4][6]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                16:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>16:00</th>
               {timetableitems[0][7]}
               {timetableitems[1][7]}
               {timetableitems[2][7]}
@@ -236,9 +259,7 @@ const Timetable = (props) => {
               {timetableitems[4][7]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                17:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>17:00</th>
               {timetableitems[0][8]}
               {timetableitems[1][8]}
               {timetableitems[2][8]}
@@ -246,9 +267,7 @@ const Timetable = (props) => {
               {timetableitems[4][8]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                18:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>18:00</th>
               {timetableitems[0][9]}
               {timetableitems[1][9]}
               {timetableitems[2][9]}
@@ -256,9 +275,7 @@ const Timetable = (props) => {
               {timetableitems[4][9]}
             </tr>
             <tr>
-              <th scope="row" style={{ width: "1%", whiteSpace: "nowrap" }}>
-                19:00
-              </th>
+              <th style={{ width: "1%", whiteSpace: "nowrap" }}>19:00</th>
               {timetableitems[0][10]}
               {timetableitems[1][10]}
               {timetableitems[2][10]}
@@ -267,6 +284,26 @@ const Timetable = (props) => {
             </tr>
           </tbody>
         </table>
+        {clickCourses && (
+          <div style={{ color: "white", marginTop: "10px" }}>
+            <span>
+              {clickTimeDay.day} {clickTimeDay.time}:00
+            </span>
+            <ul>
+              {clickCourses.map((course, i) => (
+                <li key={i}>
+                  {course.course._id} {course.course.name}
+                  <br />
+                  {course.classroom.building}
+                  {course.classroom.classNum} -- {course.time[0]}:00 -
+                  {course.time[course.time.length - 1]}:00
+                  <br />
+                  {course.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </>
   );

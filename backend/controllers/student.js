@@ -24,7 +24,6 @@ exports.getStudentTimetable = async (req, res, next) => {
           course: course.course,
           group: course.group,
         });
-        console.log(courseTimetable);
         for (let c of courseTimetable) {
           timetable.push(c);
         }
@@ -229,7 +228,6 @@ exports.postRemoveTakes = async (req, res, next) => {
 
 exports.getStudent = async (req, res, next) => {
   try {
-    console.log("11111123456786756453423");
     const { id } = req.params;
 
     let student = await Student.findOne({ _id: id });
@@ -244,7 +242,6 @@ exports.getStudent = async (req, res, next) => {
 
 //experiment
 exports.getStudentsWithTimeDate = async (req, res, next) => {
-  console.log("deeddeededeededdeddkkdkdkdkk");
   try {
     let { time, day, studentsId, studentCount } = req.query;
     studentsId = studentsId.split(",");
@@ -266,7 +263,6 @@ exports.getStudentsWithTimeDate = async (req, res, next) => {
           day,
           time,
         });
-        // console.log(timetable);
         if (timetable) {
           studentCourseArray.push({
             id: student._id,
@@ -278,7 +274,6 @@ exports.getStudentsWithTimeDate = async (req, res, next) => {
         }
       }
     }
-    // console.log(studentCourseArray);
     res.status(200).json({ studentCourseArray });
   } catch (error) {
     next(error);

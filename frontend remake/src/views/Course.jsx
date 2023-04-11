@@ -89,10 +89,9 @@ const Course = (props) => {
       setCheck(!check);
       notify("success", "created");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       let msg = error.msg || error.error.msg || "error";
       notify("danger", msg);
-      console.error(error);
     }
   };
 
@@ -109,7 +108,7 @@ const Course = (props) => {
       }
       setCourse(resData.course);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       let msg = error.msg || error.error.msg || "error";
       notify("danger", msg);
     }
@@ -135,7 +134,7 @@ const Course = (props) => {
       setDeleteCourse(resData.course.name);
       notify("success", "Deleted");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       let msg = error.msg || error.error.msg || "error";
       notify("danger", msg);
     }
@@ -161,7 +160,7 @@ const Course = (props) => {
         notify("success", "Added");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         let msg = error.msg || error.error.msg || "error";
         notify("danger", msg);
       });
@@ -187,16 +186,13 @@ const Course = (props) => {
         notify("success", "Removed");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         let msg = error.msg || error.error.msg || "error";
         notify("danger", msg);
-        console.error(error);
       });
   };
 
   let formBackgroundColour = "#0d0e17";
-
-  // console.log(localStorage.getItem("status"));
 
   return (
     <div className="content">

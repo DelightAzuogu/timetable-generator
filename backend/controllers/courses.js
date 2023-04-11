@@ -75,7 +75,6 @@ exports.getCompareTimetable = async (req, res, next) => {
         if (g === 0) continue;
         const courseStudents = await Student.find({ "takes.course": course });
 
-        console.log(courseStudents);
         const courseGroupStudents = courseStudents.filter((e) => {
           const index = e.takes.findIndex((c) => c.course._id == course._id);
           return e.takes[index].group == g;
@@ -223,7 +222,6 @@ exports.getAddTakenBy = async (req, res, next) => {
     const deptName = [];
     for (let d of dept) {
       if (!course.takenBy.includes(d.name.toLowerCase())) {
-        console.log(d.name);
         deptName.push(d.name.toLowerCase());
       }
     }
@@ -289,7 +287,6 @@ exports.postRemoveTakenBy = async (req, res, next) => {
 
 exports.getStudentCourse = async (req, res, next) => {
   try {
-    console.log("dddd");
     let { id, group } = req.query;
 
     if (!id) throw newError("invalid id", 400);
@@ -338,7 +335,6 @@ exports.getStudentCourse = async (req, res, next) => {
           day,
           time,
         });
-        // console.log(timetable);
         if (timetable) {
           studentCourseArray.push({
             id: student._id,
@@ -350,7 +346,6 @@ exports.getStudentCourse = async (req, res, next) => {
         }
       }
     }
-    // console.log(studentCourseArray);
     res.status(200).json({ studentCourseArray });
   } catch (error) {
     next(error);

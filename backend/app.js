@@ -26,13 +26,9 @@ app.use(cors());
 
 // const q = [];
 // app.use((req, res, next) => {
-//   // console.log(queue);
 //   q.push(queue.queue._generateId());
-//   console.log(q);
-//   console.log(queue);
 //   req.socket.on("close", function () {
 //     // code to handle connection abort
-//     console.log("user cancelled");
 //     queue.queue._cancelJob(q[0]);
 //   });
 //   next();

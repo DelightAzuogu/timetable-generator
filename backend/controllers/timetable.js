@@ -227,7 +227,6 @@ exports.postAddtoTimetable = async (req, res, next) => {
       if (freetimes.length > 0) {
         freetimes = ArrayShuffle(freetimes);
         freetimes = ArrayShuffle(freetimes);
-        console.log(freetimes);
         //check for the freetime that does not clash with any other course in the same section as the course in question.
         loopFreetimes: for (let freetime of freetimes) {
           let courseRecord = []; //this keeps record of checked courses
@@ -649,10 +648,8 @@ exports.postAddToTimetableManually = async (req, res, next) => {
     for (let schedule of courseSchedule) {
       if (!course.takenBy.includes(schedule.departmentName)) continue;
       const indexes = await getAllIndex(course.name, schedule.departmentName);
-      console.log(indexes);
       for (let index of indexes) {
         for (let c of schedule.schedule[index]) {
-          console.log(c);
           if (courseRecord.includes(c)) continue;
           //check if the course in schedule has a class that time
           for (let t of time) {

@@ -2,7 +2,6 @@ import React from "react";
 
 const TimetableCompareView = (props) => {
   const timetableCount = props.timetableCount;
-  console.log(timetableCount);
   let i = 1;
   return (
     <>

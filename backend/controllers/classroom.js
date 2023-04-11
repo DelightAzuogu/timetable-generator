@@ -72,7 +72,6 @@ exports.postAddClassroom = async (req, res, next) => {
 
     classroom = await Classroom.create(classroom);
 
-    console.log(classroom);
     res.status(201).json({ classroom, msg: "successful" });
   } catch (error) {
     next(error);

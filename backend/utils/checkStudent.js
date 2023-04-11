@@ -7,7 +7,6 @@ exports.checkStudent = async (id) => {
     if (!student) {
       throw newError("invalid Student", 400);
     }
-    // console.log(student);
     return student;
   } catch (error) {
     throw error;

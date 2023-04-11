@@ -19,7 +19,7 @@ const Classroom = (props) => {
       }
       setClassrooms(resData.classrooms);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   getClassrooms();
@@ -103,10 +103,9 @@ const Classroom = (props) => {
       }
       await getClassrooms();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       let msg = error.msg || error.error.msg;
       notify("danger", msg);
-      console.error(error, 111111);
     }
   };
   let formBackgroundColour = "#0d0e17";

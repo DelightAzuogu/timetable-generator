@@ -83,11 +83,10 @@ const CourseSchedule = () => {
         return res.json();
       })
       .then((resData) => {
-        console.log(resData);
         notify("success", "Added");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         let msg = error.msg || error.error.msg || "error";
         notify("danger", msg);
       });
@@ -116,11 +115,10 @@ const CourseSchedule = () => {
         return res.json();
       })
       .then((resData) => {
-        console.log(resData);
         notify("success", "Removed");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         let msg = error.msg || error.error.msg || "error";
         notify("danger", msg);
       });
@@ -149,11 +147,10 @@ const CourseSchedule = () => {
         return res.json();
       })
       .then((resData) => {
-        console.log(resData);
         setDeptCourses(resData.courses);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         let msg = error.msg || error.error.msg || "error";
         notify("danger", msg);
       });

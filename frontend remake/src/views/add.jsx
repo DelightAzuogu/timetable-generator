@@ -95,7 +95,6 @@ const AddToTimetable = (props) => {
       })
       .catch(({ error }) => {
         notify("danger", error.msg);
-        console.log(error.msg);
         console.error(error);
       });
   };

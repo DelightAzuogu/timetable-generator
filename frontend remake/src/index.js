@@ -12,8 +12,6 @@ import App from "app";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-// console.log("roort")
-
 root.render(
   <BrowserRouter>
     <Route render={(props) => <App {...props} />} />

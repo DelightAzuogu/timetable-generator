@@ -42,7 +42,6 @@ const CourseTimetableCompareTimetable = (props) => {
     if (day === 5) day = "friday";
     setDay(day);
 
-    // console.log(course);
     let url = `${BASE_URL}/course/time/details?day=${day}&time=${time}&studentCount=${number}&id=${course}`;
     if (groups[0] !== "0") {
       url += `&group=${groups}`;

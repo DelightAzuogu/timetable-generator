@@ -125,7 +125,6 @@ const Timetable = (props) => {
   }
 
   const onTimetableClick = async (times, t) => {
-    // console.log(times);
     try {
       const timess = [];
       for (let time of times) {
@@ -141,7 +140,7 @@ const Timetable = (props) => {
       setClickCourses(timess);
       setClickTimeDay({ day: times[0].day, time: time[t] });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

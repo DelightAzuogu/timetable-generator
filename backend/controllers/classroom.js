@@ -1,10 +1,7 @@
 const { Classroom } = require("../model/classroom");
-const { Course } = require("../model/course");
-const { Instructor } = require("../model/instructor");
 const { Timetable } = require("../model/timetable");
 const valError = require("../utils/validationError");
 const newError = require("../utils/error");
-const { daysOfWeek, fourHours, threeHours } = require("../utils/daysAndTime");
 const { checkClassroom } = require("../utils/checkClassroom");
 
 //this will get the timetable of the classroom
@@ -49,6 +46,7 @@ exports.getClassrooms = async (req, res, next) => {
 //add a classroom to the database
 exports.postAddClassroom = async (req, res, next) => {
   try {
+    valError(req);
     let { building, classNumber, capacity } = req.body;
     building = building.toUpperCase();
 

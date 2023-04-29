@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import NotificationAlert from "react-notification-alert";
 
-import { BASE_URL, inputStyle, URL } from "variables/general";
+import { BASE_URL } from "variables/general";
 
 const CourseSchedule = () => {
   const [departments, setDepartments] = useState([]);
@@ -175,7 +175,7 @@ const CourseSchedule = () => {
           }}
         >
           <fieldset className="" style={{ margin: "20px" }}>
-            <legend>Add Course To Department </legend>
+            <legend>Add Course To Department Course Schedule </legend>
             <div className="form-group m-form">
               <select
                 role="menu"
@@ -254,7 +254,7 @@ const CourseSchedule = () => {
           }}
         >
           <fieldset className="" style={{ margin: "20px" }}>
-            <legend>Remove Course From Department </legend>
+            <legend>Remove Course From Department Course Schedule </legend>
             <div className="form-group m-form">
               <select
                 role="menu"

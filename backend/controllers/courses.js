@@ -1,6 +1,4 @@
-const { Classroom } = require("../model/classroom");
 const { Course } = require("../model/course");
-const { Instructor } = require("../model/instructor");
 const { Timetable } = require("../model/timetable");
 const valError = require("../utils/validationError");
 const newError = require("../utils/error");

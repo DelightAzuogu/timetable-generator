@@ -8,7 +8,7 @@ const router = Router();
 
 router.post(
   "/add",
-  isAdmin,
+  // isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }),
     check("course").isAlphanumeric().trim(),

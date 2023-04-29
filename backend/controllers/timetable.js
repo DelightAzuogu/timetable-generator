@@ -155,6 +155,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
     valError(req);
 
     let { studentCount, instructorId, courseId, group } = req.body;
+    console.log(studentCount);
 
     if (group <= 0) {
       group = 1;
@@ -176,7 +177,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
       throw newError("course with group already exists", 400);
     }
 
-    const maxCapacity = maxClassRoom(); //the max classroom capacity;
+    const maxCapacity = await maxClassRoom(); //the max classroom capacity;
 
     //classrooms that can contain that number of student
     let min = parseInt(studentCount);

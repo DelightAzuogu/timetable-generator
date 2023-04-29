@@ -6,6 +6,8 @@ const { Instructor } = require("../model/instructor");
 const { Course } = require("../model/course");
 const { Department } = require("../model/department");
 const { Student } = require("../model/student");
+const { courseSchedule } = require("./courseSchedule");
+const { CourseSchedule } = require("../model/courseSchedule");
 
 exports.createDummy = async () => {
   //create an admin
@@ -18,7 +20,7 @@ exports.createDummy = async () => {
   //create multiple classrooms
   let capacity = 40;
   let classNum = 100;
-  for (let i = 0; i < 20; i++, capacity += 15, classNum += 1) {
+  for (let i = 0; i < 10; i++, capacity += 15, classNum += 1) {
     await Classroom.create({ building: "AS", capacity, classNum });
     await Classroom.create({ building: "ECZ", capacity, classNum });
     await Classroom.create({ building: "HK", capacity, classNum });
@@ -160,7 +162,7 @@ exports.createDummy = async () => {
     department: comp,
     takes: [
       { course: cal_1, group: 1 },
-      { course: data, group: 2 },
+      { course: data, group: 1 },
       { course: dsp, group: 1 },
     ],
   });
@@ -171,52 +173,10 @@ exports.createDummy = async () => {
     department: comp,
     takes: [
       { course: cal_1, group: 1 },
-      { course: data, group: 2 },
+      { course: data, group: 1 },
       { course: dsp, group: 1 },
     ],
   });
-
-  // await Student.create({
-  //   name: { first: "delight", last: "azuogu" },
-  //   _id: i++,
-  //   department: soft,
-  //   takes: [pseudo, compPro, cal_1]
-  // })
-
-  // await Student.create({
-  //   name: { first: "delight", last: "azuogu" },
-  //   _id: i++,
-  //   department: soft,
-  //   takes: [pseudo, data, cal_2]
-  // })
-
-  // await Student.create({
-  //   name: { first: "delight", last: "azuogu" },
-  //   _id: i++,
-  //   department: eee,
-  //   takes: [cal_2, dip, dsp, sp]
-  // })
-
-  // await Student.create({
-  //   name: { first: "delight", last: "azuogu" },
-  //   _id: i++,
-  //   department: eee,
-  //   takes: [cal_1, dip, dsp, acc]
-  // })
-
-  // await Student.create({
-  //   name: { first: "delight", last: "azuogu" },
-  //   _id: i++,
-  //   department: bus,
-  //   takes: [cal_2, sp, acc]
-  // })
-
-  // await Student.create({
-  //   name: { first: "delight", last: "azuogu" },
-  //   _id: i++,
-  //   department: bus,
-  //   takes: [cal_1, sp, acc]
-  // })
 
   //create instructors
   i = 1;
@@ -230,19 +190,58 @@ exports.createDummy = async () => {
     name: "ikechukwu delight",
     password: hashPassword,
   });
-  await Instructor.create({
-    _id: i++,
-    name: "azuogu delight",
-    password: hashPassword,
-  });
-  await Instructor.create({
-    _id: i++,
-    name: "delight azuogu",
-    password: hashPassword,
-  });
-  await Instructor.create({
-    _id: i++,
-    name: "ikechukwu azuogu",
-    password: hashPassword,
-  });
+
+  //course schedule
+  // CourseSchedule.create({
+  //   departmentName: "software engineering",
+  //   schedule: [
+  //     ["Data Structure", "Calculus 1", "Computer Programming"],
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Data Structure", "Calculus 1", "Computer Programming"],
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //     ["Calculus 2", "Digital Image"],
+  //     ["Data Structure", "Calculus 1", "Computer Programming"],
+  //     ["Calculus 2", "Digital Image"],
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //   ],
+  // });
+  // CourseSchedule.create({
+  //   departmentName: "computer engineering",
+  //   schedule: [
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //     ["Data Structure", "Calculus 1"],
+  //     ["Data Structure", "Calculus 1", "Computer Programming"],
+  //     ["Calculus 2", "Digital Image"],
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Calculus 2", "Digital Image"],
+  //   ],
+  // });
+  // CourseSchedule.create({
+  //   departmentName: "electrical engineering",
+  //   schedule: [
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Data Structure", "Calculus 1", "Computer Programming"],
+  //     ["Calculus 2", "Digital Image"],
+  //     ["Data Structure", "Calculus 1"],
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Data Structure", "Calculus 1"],
+  //     ["Calculus 2", "Digital Image"],
+  //   ],
+  // });
+  // CourseSchedule.create({
+  //   departmentName: "business administration",
+  //   schedule: [
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Data Structure", "Calculus 1"],
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Calculus 2", "Digital Image"],
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //     ["Pseudo Code", "Computer Programming", "Digital Image"],
+  //     ["Digital Signal", "Strategic Planning", "Accounting"],
+  //   ],
+  // });
 };

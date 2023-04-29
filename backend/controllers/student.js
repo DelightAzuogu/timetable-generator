@@ -162,6 +162,9 @@ exports.postAddtakes = async (req, res, next) => {
 
     //check course
     const course = await checkCourse(courseId);
+    if (!course.takenBy.includes(student.department.name)) {
+      throw newError("student department cannot take this course", 400);
+    }
 
     //check group
     if (group <= 0) {
@@ -240,7 +243,6 @@ exports.getStudent = async (req, res, next) => {
   }
 };
 
-//experiment
 exports.getStudentsWithTimeDate = async (req, res, next) => {
   try {
     let { time, day, studentsId, studentCount } = req.query;

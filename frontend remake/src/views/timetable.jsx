@@ -71,7 +71,7 @@ const Timetable = (props) => {
       const times = timetable.filter((e) => {
         if (e.day === day[i] && e.time.includes(time[j])) {
           return e;
-        }
+        } else return null;
       });
       if (times.length) {
         let details = "";

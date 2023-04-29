@@ -241,7 +241,7 @@ const Student = (props) => {
             <div className="text-center m-form">
               <input
                 type="submit"
-                value="Delete Student"
+                value="View Student Timetable "
                 className="btn btn-dark btn-lg"
               />
             </div>
@@ -307,7 +307,7 @@ const Student = (props) => {
             <div className="text-center m-form">
               <input
                 type="submit"
-                value="Delete Student"
+                value="View Student"
                 className="btn btn-dark btn-lg"
               />
             </div>
@@ -502,7 +502,7 @@ const Student = (props) => {
                 <div className="text-center m-form">
                   <input
                     type="submit"
-                    value="Delete Student"
+                    value="Add Course"
                     className="btn btn-dark btn-lg"
                   />
                 </div>
@@ -569,7 +569,7 @@ const Student = (props) => {
                 <div className="text-center m-form">
                   <input
                     type="submit"
-                    value="Delete Student"
+                    value="Remove Course"
                     className="btn btn-dark btn-lg"
                   />
                 </div>

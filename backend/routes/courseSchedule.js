@@ -7,6 +7,32 @@ const isAdmin = require("../utils/isAdmin");
 const router = Router();
 
 router.post(
+  "/add-special",
+  // isAdmin,
+  [
+    check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
+    check("courseAddId").isAlphanumeric().trim(),
+    check("course").isAlphanumeric().trim(),
+    check("year").isNumeric().trim(),
+    check("semester").isAlphanumeric().trim(),
+  ],
+  courseScheduleController.postaddSpecialCase
+);
+
+router.post(
+  "/remove-special",
+  // isAdmin,
+  [
+    check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
+    check("courseRemoveId").isAlphanumeric().trim(),
+    check("courseId").isAlphanumeric().trim(),
+    check("year").isNumeric().trim(),
+    check("semester").isAlphanumeric().trim(),
+  ],
+  courseScheduleController.postRemoveSpecialCase
+);
+
+router.post(
   "/add",
   // isAdmin,
   [
@@ -20,7 +46,7 @@ router.post(
 
 router.post(
   "/remove",
-  isAdmin,
+  // isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
     check("course").isAlphanumeric().trim(),

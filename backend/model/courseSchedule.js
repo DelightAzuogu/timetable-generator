@@ -5,7 +5,19 @@ const courseScheduleSchema = new Schema({
     type: String,
     required: true,
   },
-  schedule: { type: [[String]] },
+  schedule: {
+    type: [String],
+  },
+  year: {
+    type: Number,
+    required: true,
+  },
+  semester: {
+    type: Number,
+    required: true,
+  },
+  //this special cases are in case of carry overs.
+  specialCase: { type: {}, default: undefined },
 });
 
 exports.CourseSchedule = mongoose.model("CourseSchedule", courseScheduleSchema);

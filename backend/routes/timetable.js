@@ -14,7 +14,7 @@ router.get("/add", timetableController.getAddToTimetable);
 //this is adding to the timetable automaticall
 router.post(
   "/add",
-  isAdmin,
+  // isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
@@ -28,7 +28,7 @@ router.post(
 //this is adding to the timetable automatically but with same day teaching
 router.post(
   "/add-same-day",
-  isAdmin,
+  // isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
@@ -42,7 +42,7 @@ router.post(
 //this is adding to the timetable manually
 router.post(
   "/add-manually",
-  isAdmin,
+  // isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),

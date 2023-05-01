@@ -8,7 +8,7 @@ const router = Router();
 
 router.post(
   "/add-special",
-  // isAdmin,
+  isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
     check("courseAddId").isAlphanumeric().trim(),
@@ -21,7 +21,7 @@ router.post(
 
 router.post(
   "/remove-special",
-  // isAdmin,
+  isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
     check("courseRemoveId").isAlphanumeric().trim(),
@@ -34,7 +34,7 @@ router.post(
 
 router.post(
   "/add",
-  // isAdmin,
+  isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }),
     check("course").isAlphanumeric().trim(),
@@ -46,7 +46,7 @@ router.post(
 
 router.post(
   "/remove",
-  // isAdmin,
+  isAdmin,
   [
     check("deptName").isAlpha(undefined, { ignore: " " }).trim(),
     check("course").isAlphanumeric().trim(),

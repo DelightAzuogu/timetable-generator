@@ -6,8 +6,6 @@ const { Instructor } = require("../model/instructor");
 const { Course } = require("../model/course");
 const { Department } = require("../model/department");
 const { Student } = require("../model/student");
-const { courseSchedule } = require("./courseSchedule");
-const { CourseSchedule } = require("../model/courseSchedule");
 
 exports.createDummy = async () => {
   //create an admin

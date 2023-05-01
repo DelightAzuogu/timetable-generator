@@ -139,7 +139,6 @@ exports.postRemoveCourseSchedule = async (req, res, next) => {
 
     courseSchedule.specialCase = specialCase;
     courseSchedule.schedule = courseArray;
-    console.log(courseSchedule);
     courseSchedule = await courseSchedule.save();
 
     res.status(201).json({ courseSchedule, msg: "successful" });
@@ -233,14 +232,11 @@ exports.postaddSpecialCase = async (req, res, next) => {
       }
 
       specialCase[courseSpecial.name].push(courseAdd.name);
-      console.log(specialCase);
     }
 
     courseSchedule.specialCase = specialCase;
 
     courseSchedule = await courseSchedule.save();
-
-    console.log(courseSchedule);
 
     res.status(201).json({ msg: "successfully added", courseSchedule });
   } catch (error) {

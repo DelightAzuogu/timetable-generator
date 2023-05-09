@@ -589,7 +589,7 @@ const CourseSchedule = () => {
           }}
         >
           <fieldset className="" style={{ margin: "20px" }}>
-            <legend>Add Course as Special Case in Schedule </legend>
+            <legend>Remove Course as Special Case in Schedule </legend>
             <div className="form-group m-form">
               <select
                 role="menu"

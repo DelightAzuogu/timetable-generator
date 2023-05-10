@@ -1,0 +1,46 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+option {
+  background-color: #2d50ba;
+  color: white;
+}
+
+.m-form {
+  margin-top: 30px;
+}
+
+table {
+  border: solid white !important;
+  border-width: 1px !important;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 7px;
+  border: solid white !important;
+  border-width: 1px !important;
+  color: white;
+  /* width: 20px; */
+  margin: 0px;
+}
+
+
+@media print {
+  table {
+    border: solid #000 !important;
+    border-width: 1px !important;
+  }
+
+  th,
+  td {
+    color: #000;
+    border: solid #000 !important;
+    border-width: 1px !important;
+  }
+}

@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 .tim-row {
   margin-bottom: 20px;
 }
@@ -68,7 +51,7 @@
 }
 
 @media all and (min-width: 992px) {
-  .sidebar .nav > li.active-pro {
+  .sidebar .nav>li.active-pro {
     position: absolute;
     width: 100%;
     bottom: 10px;
@@ -87,6 +70,7 @@
   color: #ffffff;
   position: relative;
 }
+
 .offline-doc .page-header .page-header-image {
   position: absolute;
   background-size: cover;
@@ -95,6 +79,7 @@
   height: 100%;
   z-index: -1;
 }
+
 .offline-doc .page-header .content-center {
   position: absolute;
   top: 50%;
@@ -109,33 +94,41 @@
   width: 100%;
   max-width: 880px;
 }
+
 .offline-doc .page-header footer {
   position: absolute;
   bottom: 0;
   width: 100%;
 }
+
 .offline-doc .page-header .container {
   height: 100%;
   z-index: 1;
 }
+
 .offline-doc .page-header .category,
 .offline-doc .page-header .description {
   color: rgba(255, 255, 255, 0.8);
 }
+
 .offline-doc .page-header.page-header-small {
   min-height: 60vh;
   max-height: 440px;
 }
+
 .offline-doc .page-header.page-header-mini {
   min-height: 40vh;
   max-height: 340px;
 }
+
 .offline-doc .page-header .title {
   margin-bottom: 15px;
 }
-.offline-doc .page-header .title + h4 {
+
+.offline-doc .page-header .title+h4 {
   margin-top: 10px;
 }
+
 .offline-doc .page-header:after,
 .offline-doc .page-header:before {
   position: absolute;
@@ -147,6 +140,7 @@
   top: 0;
   content: "";
 }
+
 .offline-doc .page-header:before {
   background-color: rgba(0, 0, 0, 0.8);
 }

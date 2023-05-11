@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 > # Timetable Generator App
 >
 > > This is a timetable generator app that greats the timetable for a university, i.e. it assigns a classroom, time and day to a course that is taken by an instructor.
 > >
 > > The time tables can be inserted manually or automatically.
+=======
+# Timetable Generator App
+
+> This is a timetable generator app that greats the timetable for a university, i.e. it assigns a classroom, time and day to a course that is taken by an instructor.
+>
+> The time tables can be inserted manually or automatically.
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 >
 > ## Features
 >
@@ -16,3 +24,20 @@
 > >
 > > > 1. Can add a course to the timetable both automatically and manually
 > > > 2. Can remove a course from the timetable
+<<<<<<< HEAD
+=======
+
+# Running the code
+
+> ## Running The Backend
+>
+> > Run `npm start` in your terminal to run it normally or `npm run dev` to clear your terminal first before running the actual code.
+> >
+> > ### Running te frontend
+> >
+> > Run `npm start` in your terminal to run the code
+>
+> ## Important Note
+>
+> > There will be few commits here because i was working with my GitHub repo while i was working on the project and not gitbucket. To see the github repo and all the commits that was made you can find it -> https://github.com/DelightAzuogu/timetable-generatorS
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d

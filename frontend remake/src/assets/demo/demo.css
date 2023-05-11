@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*!
 
 =========================================================
@@ -15,6 +16,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+=======
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .tim-row {
   margin-bottom: 20px;
 }
@@ -68,7 +71,11 @@
 }
 
 @media all and (min-width: 992px) {
+<<<<<<< HEAD
   .sidebar .nav > li.active-pro {
+=======
+  .sidebar .nav>li.active-pro {
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
     position: absolute;
     width: 100%;
     bottom: 10px;
@@ -87,6 +94,10 @@
   color: #ffffff;
   position: relative;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header .page-header-image {
   position: absolute;
   background-size: cover;
@@ -95,6 +106,10 @@
   height: 100%;
   z-index: -1;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header .content-center {
   position: absolute;
   top: 50%;
@@ -109,33 +124,65 @@
   width: 100%;
   max-width: 880px;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header footer {
   position: absolute;
   bottom: 0;
   width: 100%;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header .container {
   height: 100%;
   z-index: 1;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header .category,
 .offline-doc .page-header .description {
   color: rgba(255, 255, 255, 0.8);
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header.page-header-small {
   min-height: 60vh;
   max-height: 440px;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header.page-header-mini {
   min-height: 40vh;
   max-height: 340px;
 }
+<<<<<<< HEAD
 .offline-doc .page-header .title {
   margin-bottom: 15px;
 }
 .offline-doc .page-header .title + h4 {
   margin-top: 10px;
 }
+=======
+
+.offline-doc .page-header .title {
+  margin-bottom: 15px;
+}
+
+.offline-doc .page-header .title+h4 {
+  margin-top: 10px;
+}
+
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d
 .offline-doc .page-header:after,
 .offline-doc .page-header:before {
   position: absolute;
@@ -147,6 +194,13 @@
   top: 0;
   content: "";
 }
+<<<<<<< HEAD
 .offline-doc .page-header:before {
   background-color: rgba(0, 0, 0, 0.8);
 }
+=======
+
+.offline-doc .page-header:before {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+>>>>>>> dd8c8263a7cb7e827ab51070a30209008644e27d

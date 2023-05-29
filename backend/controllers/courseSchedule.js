@@ -92,6 +92,7 @@ exports.postAddCourseSchedule = async (req, res, next) => {
     }
     if (!redirected) {
       res.status(201).json({ courseSchedule, msg: "successful" });
+      next();
     }
   } catch (error) {
     next(error);
@@ -142,6 +143,7 @@ exports.postRemoveCourseSchedule = async (req, res, next) => {
     courseSchedule = await courseSchedule.save();
 
     res.status(201).json({ courseSchedule, msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }
@@ -239,6 +241,7 @@ exports.postaddSpecialCase = async (req, res, next) => {
     courseSchedule = await courseSchedule.save();
 
     res.status(201).json({ msg: "successfully added", courseSchedule });
+    next();
   } catch (error) {
     next(error);
   }
@@ -301,6 +304,7 @@ exports.postRemoveSpecialCase = async (req, res, next) => {
     courseSchedule = await courseSchedule.save();
 
     res.status(200).json({ msg: "removed successfully", courseSchedule });
+    next();
   } catch (error) {
     next(error);
   }

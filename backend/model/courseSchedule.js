@@ -5,6 +5,7 @@ const courseScheduleSchema = new Schema({
     type: String,
     required: true,
   },
+  //the actual course schedule for that year and semester
   schedule: {
     type: [String],
   },

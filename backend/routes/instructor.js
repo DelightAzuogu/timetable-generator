@@ -3,6 +3,7 @@ const { check } = require("express-validator");
 
 const instructorController = require("../controllers/instructor");
 const isAdmin = require("../utils/isAdmin");
+const { setTrue, setFalse } = require("../utils/requests");
 
 const router = Router();
 
@@ -23,11 +24,19 @@ router.post(
       .trim(),
   ],
   isAdmin,
-  instructorController.postAddInstuctor
+  setTrue,
+  instructorController.postAddInstuctor,
+  setFalse
 );
 
 //delete and instructor
-router.delete("/:id", isAdmin, instructorController.deleteInstructor);
+router.delete(
+  "/:id",
+  isAdmin,
+  setTrue,
+  instructorController.deleteInstructor,
+  setFalse
+);
 
 router.get("/:id", instructorController.getInstructor);
 

@@ -3,6 +3,7 @@ const { check, body } = require("express-validator");
 
 const classroomController = require("../controllers/classroom");
 const isAdmin = require("../utils/isAdmin");
+const { setTrue, setFalse } = require("../utils/requests");
 
 const router = Router();
 
@@ -27,10 +28,18 @@ router.post(
     check("capacity").isNumeric().trim(),
   ],
   isAdmin,
-  classroomController.postAddClassroom
+  setTrue,
+  classroomController.postAddClassroom,
+  setFalse
 );
 
 //delete remive course
-router.delete("/:id", isAdmin, classroomController.DeleteClassroom);
+router.delete(
+  "/:id",
+  isAdmin,
+  setTrue,
+  classroomController.DeleteClassroom,
+  setFalse
+);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const { check, body } = require("express-validator");
 
 const courseScheduleController = require("../controllers/courseSchedule");
 const isAdmin = require("../utils/isAdmin");
+const { setTrue, setFalse } = require("../utils/requests");
 
 const router = Router();
 
@@ -16,7 +17,9 @@ router.post(
     check("year").isNumeric().trim(),
     check("semester").isAlphanumeric().trim(),
   ],
-  courseScheduleController.postaddSpecialCase
+  setTrue,
+  courseScheduleController.postaddSpecialCase,
+  setFalse
 );
 
 router.post(
@@ -29,7 +32,9 @@ router.post(
     check("year").isNumeric().trim(),
     check("semester").isAlphanumeric().trim(),
   ],
-  courseScheduleController.postRemoveSpecialCase
+  setTrue,
+  courseScheduleController.postRemoveSpecialCase,
+  setFalse
 );
 
 router.post(
@@ -41,7 +46,9 @@ router.post(
     check("year").isNumeric().trim(),
     check("semester").isNumeric().trim(),
   ],
-  courseScheduleController.postAddCourseSchedule
+  setTrue,
+  courseScheduleController.postAddCourseSchedule,
+  setFalse
 );
 
 router.post(
@@ -53,7 +60,9 @@ router.post(
     check("year").isNumeric().trim(),
     check("semester").isAlphanumeric().trim(),
   ],
-  courseScheduleController.postRemoveCourseSchedule
+  setTrue,
+  courseScheduleController.postRemoveCourseSchedule,
+  setFalse
 );
 
 router.get("/", courseScheduleController.getCourseSchedule);

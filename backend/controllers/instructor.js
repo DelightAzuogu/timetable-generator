@@ -51,6 +51,7 @@ exports.postAddInstuctor = async (req, res, next) => {
 
     instructor = await Instructor.create(instructor);
     res.status(201).json({ instructor, msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }
@@ -74,6 +75,7 @@ exports.deleteInstructor = async (req, res, next) => {
     //delete the instructor
     instructor.delete();
     res.json({ msg: "successful", timetables });
+    next();
   } catch (error) {
     next(error);
   }

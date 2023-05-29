@@ -135,6 +135,7 @@ exports.postAddStudent = async (req, res, next) => {
     student = await Student.create(student);
 
     res.status(201).json({ student, msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }
@@ -146,6 +147,7 @@ exports.deleteStudent = async (req, res, next) => {
     const student = await checkStudent(id);
     student.delete();
     res.status(204).json({ msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }
@@ -189,6 +191,7 @@ exports.postAddtakes = async (req, res, next) => {
       student = await student.save();
     }
     res.status(200).json({ student, msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }
@@ -224,6 +227,7 @@ exports.postRemoveTakes = async (req, res, next) => {
 
     student = await student.save();
     res.status(200).json({ student, msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }

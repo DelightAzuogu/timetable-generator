@@ -174,6 +174,7 @@ exports.postAddCourse = async (req, res, next) => {
     course = await Course.create(course);
 
     res.status(201).json({ msg: "successful", course });
+    next();
   } catch (error) {
     next(error);
   }
@@ -205,6 +206,7 @@ exports.deleteCourse = async (req, res, next) => {
     //delete the course
     course.delete();
     res.status(200).json({ msg: "successful", timetables, students, course });
+    next();
   } catch (error) {
     next(error);
   }
@@ -251,6 +253,7 @@ exports.postAddTakenBy = async (req, res, next) => {
     course.takenBy.push(dept);
     course = await course.save();
     res.status(201).json({ msg: "successful", course });
+    next();
   } catch (error) {
     next(error);
   }
@@ -278,6 +281,7 @@ exports.postRemoveTakenBy = async (req, res, next) => {
 
     course = await course.save();
     res.status(200).json({ course, msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }

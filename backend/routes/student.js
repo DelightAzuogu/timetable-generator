@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 const studentController = require("../controllers/student.js");
 const isAdmin = require("../utils/isAdmin.js");
+const { setTrue, setFalse } = require("../utils/requests.js");
 
 const router = Router();
 
@@ -29,32 +30,44 @@ router.post(
     check("id").isNumeric().trim(),
     check("deptId").isAlphanumeric().trim(),
   ],
-  studentController.postAddStudent
+  setTrue,
+  studentController.postAddStudent,
+  setFalse
 );
 
 //delete a student
-router.delete("/:id", isAdmin, studentController.deleteStudent);
+router.delete(
+  "/:id",
+  isAdmin,
+  setTrue,
+  studentController.deleteStudent,
+  setFalse
+);
 
 //add to student takes
 router.post(
   "/add-takes/:id",
-  // isAdmin,
+  isAdmin,
   [
     check("group").isNumeric().trim(),
     check("courseId").isAlphanumeric().trim(),
   ],
-  studentController.postAddtakes
+  setTrue,
+  studentController.postAddtakes,
+  setFalse
 );
 
 // remove from stdent takes
 router.post(
   "/remove-takes/:id",
-  // isAdmin,
+  isAdmin,
   [
     check("group").isNumeric().trim(),
     check("courseId").isAlphanumeric().trim(),
   ],
-  studentController.postRemoveTakes
+  setTrue,
+  studentController.postRemoveTakes,
+  setFalse
 );
 
 // get a particular student

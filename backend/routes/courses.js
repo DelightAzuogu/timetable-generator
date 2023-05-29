@@ -3,6 +3,7 @@ const { check, body } = require("express-validator");
 
 const courseController = require("../controllers/courses");
 const isAdmin = require("../utils/isAdmin");
+const { setTrue, setFalse } = require("../utils/requests");
 
 const router = Router();
 
@@ -28,18 +29,28 @@ router.post(
     check("departmentId").notEmpty().trim(),
   ],
   isAdmin,
-  courseController.postAddCourse
+  setTrue,
+  courseController.postAddCourse,
+  setFalse
 );
 
 //delete a course
-router.delete("/:id", isAdmin, courseController.deleteCourse);
+router.delete(
+  "/:id",
+  isAdmin,
+  setTrue,
+  courseController.deleteCourse,
+  setFalse
+);
 
 //add the the takenby of a course
 router.post(
   "/add-takenby/:id",
   isAdmin,
   check("dept").isAlpha(undefined, { ignore: " " }),
-  courseController.postAddTakenBy
+  setTrue,
+  courseController.postAddTakenBy,
+  setFalse
 );
 
 //get the depts that are not in the
@@ -53,7 +64,9 @@ router.post(
   "/remove-takenby/:id",
   isAdmin,
   check("dept").isAlpha(undefined, { ignore: " " }),
-  courseController.postRemoveTakenBy
+  setTrue,
+  courseController.postRemoveTakenBy,
+  setFalse
 );
 
 //get the courses

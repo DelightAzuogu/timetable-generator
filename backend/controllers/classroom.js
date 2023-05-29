@@ -71,6 +71,7 @@ exports.postAddClassroom = async (req, res, next) => {
     classroom = await Classroom.create(classroom);
 
     res.status(201).json({ classroom, msg: "successful" });
+    next();
   } catch (error) {
     next(error);
   }
@@ -91,6 +92,7 @@ exports.DeleteClassroom = async (req, res, next) => {
 
     classroom.delete();
     res.status(200).json({ msg: "successsful", timetables });
+    next();
   } catch (error) {
     next(error);
   }

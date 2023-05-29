@@ -1,8 +1,6 @@
 const express = require("express");
 require("dotenv").config();
 var cors = require("cors");
-//this is for the queue, to manage the requests that come in
-var expressQueue = require("express-queue");
 
 const database = require("./database.js");
 const authRoute = require("./routes/auth");
@@ -13,24 +11,33 @@ const classroomRoute = require("./routes/classroom");
 const studentRoute = require("./routes/student");
 const departmentRoute = require("./routes/department");
 const courseScheduleRoute = require("./routes/courseSchedule");
+const newError = require("./utils/error.js");
+const { setFalse } = require("./utils/requests.js");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-//activeLimit set the ammount of simultaneous request that can be proccessed
-//queueLimit set the amount of requests that can be in the queue (-1 means there is no limit)
-// const queue = expressQueue({ activeLimit: 1, queuedLimit: -1 });
-// app.use(queue);
+// let parse = false;
 
-// const q = [];
 // app.use((req, res, next) => {
-//   q.push(queue.queue._generateId());
-//   req.socket.on("close", function () {
-//     // code to handle connection abort
-//     queue.queue._cancelJob(q[0]);
-//   });
+//   if (parse == true) {
+//     next(newError("deeddeedde", 400));
+//   } else {
+//     parse = true;
+//     next();
+//   }
+// });
+
+// app.use(async (req, res, next) => {
+//   async function myFunction() {
+//     // console.log("Before pause");
+//     await new Promise((resolve) => setTimeout(resolve, 10000)); // Pause for 3 seconds
+//     // console.log("After pause");
+//   }
+
+//   await myFunction();
 //   next();
 // });
 
@@ -64,10 +71,14 @@ app.use("/", (req, res, next) => {
 
 //error handling function
 app.use((error, req, res, next) => {
-  console.log(error);
+  // console.log(error.message);
+  // console.log(error);
   const status = error.status || 500;
   error.msg = error.message || "server Error";
   res.status(status).json({ error });
+  if (error.message !== "another post request is fired up") {
+    setFalse();
+  }
 });
 
 const PORT = process.env.PORT || 3000;

@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { check, body } = require("express-validator");
 const isAdmin = require("../utils/isAdmin");
+const { setFalse, setTrue } = require("../utils/requests");
 
 const timetableController = require("../controllers/timetable");
 
@@ -14,35 +15,40 @@ router.get("/add", timetableController.getAddToTimetable);
 //this is adding to the timetable automaticall
 router.post(
   "/add",
-  // isAdmin,
+  isAdmin,
+
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
     check("studentCount").isLength({ min: 0 }).notEmpty().trim(),
     check("group").isLength({ min: 0 }).notEmpty().trim(),
   ],
-  timetableController.postAddtoTimetable
+  setTrue,
+  timetableController.postAddtoTimetable,
+  setFalse
 );
 
 //post add-same-day
 //this is adding to the timetable automatically but with same day teaching
 router.post(
   "/add-same-day",
-  // isAdmin,
+  isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
     check("studentCount").isLength({ min: 0 }).notEmpty().trim(),
     check("group").isLength({ min: 0 }).notEmpty().trim(),
   ],
-  timetableController.postSameDayAddToTimetable
+  setTrue,
+  timetableController.postSameDayAddToTimetable,
+  setFalse
 );
 
 //post add-manually
 //this is adding to the timetable manually
 router.post(
   "/add-manually",
-  // isAdmin,
+  isAdmin,
   [
     check("instructorId").notEmpty().trim(),
     check("courseId").notEmpty().trim(),
@@ -51,10 +57,18 @@ router.post(
     check("classroomId").notEmpty().trim(),
     check("day").notEmpty().trim(),
   ],
-  timetableController.postAddToTimetableManually
+  setTrue,
+  timetableController.postAddToTimetableManually,
+  setFalse
 );
 
-router.delete("/:id", isAdmin, timetableController.deleteFromTimetable);
+router.delete(
+  "/:id",
+  isAdmin,
+  setTrue,
+  timetableController.deleteFromTimetable,
+  setFalse
+);
 
 //this will return the timetables
 router.get("/", timetableController.getTimetable);

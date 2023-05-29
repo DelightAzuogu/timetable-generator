@@ -129,6 +129,7 @@ that shuffles the classes and pick one and also shuffles the times the select cl
 post add to the timetable*/
 exports.postAddtoTimetable = async (req, res, next) => {
   try {
+    console.log("normall");
     //check for validation err
     valError(req);
 
@@ -284,6 +285,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
     }
     timetable = await Timetable.create(timetable);
     res.status(201).json({ msg: "success", timetable });
+    next();
   } catch (error) {
     next(error);
   }
@@ -294,6 +296,7 @@ exports.postAddtoTimetable = async (req, res, next) => {
 //then it will be redirected to the add normally route so they can find a suitable time and put them
 exports.postSameDayAddToTimetable = async (req, res, next) => {
   try {
+    console.log("not normal");
     //check for validation err
     valError(req);
 
@@ -585,6 +588,7 @@ exports.postSameDayAddToTimetable = async (req, res, next) => {
         throw newError("instructor cannot be fitted on the same day 2", 400);
       }
     }
+    next();
   } catch (error) {
     next(error);
   }
@@ -708,6 +712,7 @@ exports.postAddToTimetableManually = async (req, res, next) => {
     timetable = await Timetable.create(timetable);
 
     res.status(201).json({ msg: "success", timetable });
+    next();
   } catch (error) {
     next(error);
   }
@@ -736,9 +741,8 @@ exports.deleteFromTimetable = async (req, res, next) => {
     await Timetable.deleteOne({ _id: id });
 
     res.status(204).json({ msg: "deleted" });
+    next();
   } catch (error) {
     next(error);
   }
 };
-
-//experimental
